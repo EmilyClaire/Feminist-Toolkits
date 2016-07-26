@@ -7,10 +7,38 @@ var db = require('../_db');
 
 module.exports = db.define('user', {
     email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            isEmail: true
+            // ,
+            // isUnique: function () {
+            //     this.Model.findOne({
+            //         where: {
+            //             email: user.email
+            //         }
+            //     })
+            //     .then(function (response) {
+            //         if (response) {
+            //             console.log('THIS IS RESPONSE', response);
+            //             throw new Error();
+            //         }
+            //     })
+            // }
+        },
+        unique: true
+    },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
     },
     password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    isAdmin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
     },
     salt: {
         type: Sequelize.STRING
@@ -53,3 +81,4 @@ module.exports = db.define('user', {
         }
     }
 });
+
