@@ -156,7 +156,9 @@ describe('User model', function () {
         var buildWithExistingEmail = User.build({ email: 'obama@gmail.com', password: '123', name: 'What Ever'});
 
 
-        User.create({ email: 'obama@gmail.com', password: 'potus', name: 'Mr. President'});
+        beforeEach(function () {
+            return User.create({ email: 'obama@gmail.com', password: 'potus', name: 'Mr. President'});
+        })
 
 
         it('rejects a bad email',
@@ -177,11 +179,14 @@ describe('User model', function () {
              })
            })
 
-        xit('email has to be unique', function () {
-           return buildWithExistingEmail.validate()
-            .then(function (res2) {
-                console.log('HERE IS RES2', res2);
-                expect(res2).to.be.an.instanceOf(Error);
+        it('email has to be unique', function () {
+           return buildWithExistingEmail.save()
+            .then(function (result) {
+                expect(result).to.not.exist;
+            })
+            .catch(function (err) {
+                expect(err).to.exist;
+                expect(err.errors[0].message).to.equal('email must be unique')
             })
         })
 
