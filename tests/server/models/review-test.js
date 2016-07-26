@@ -29,24 +29,28 @@ describe('Review model', function () {
         })
         .catch(function(err){
             expect(err).to.exist;
-            console.log('err',err);
-            expect(err.errors[0]).to.equal('')
+            expect(err.errors[0].message).to.equal('Validation max failed')
         })
     });
     it('Stars # must be greater than 0', function () {
         return Review.create({stars: 0, content: 'This is just awful. 1234567890.'})
-        .then(function(response){
-            expect(response).to.be.an.instanceOf(Error);
+        .then(function(result){
+            expect(result).to.not.exist;
         })
-
-    })
-
+        .catch(function(err){
+            expect(err).to.exist;
+            expect(err.errors[0].message).to.equal('Validation min failed')
+        })
+    });
     it('content must be at least 20 chars', function () {
        return Review.create({stars: 4, content: 'Bad.'})
-        .then(function(response){
-            console.log('shortreview', response);
-            expect(response).to.be.an.instanceOf(Error);
+        .then(function(result){
+            console.log('resultShort:',result)
+            expect(result).to.not.exist;
         })
-    })
-
+        .catch(function(err){
+            expect(err).to.exist;
+            expect(err.errors[0].message).to.equal('Validation len failed')
+        })
+    });
 });
