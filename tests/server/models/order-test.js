@@ -13,7 +13,7 @@ describe('Order model', function () {
        return db.sync({ force: true });
     });
 
-    // Our tests below:
+
     describe('order creation and validation', function () {
 
         var buildInvalidOrder = Order.build({});
