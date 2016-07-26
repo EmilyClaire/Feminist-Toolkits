@@ -26,5 +26,16 @@ module.exports = db.define('product', {
         validate: {
             min: 0
         }
+    },
+    currentPrice: {
+        type: Sequelize.FLOAT(10,2),
+        allowNull: false,
+        validate: {
+            min: 0
+        }
+    },
+    photoUrl: {
+        type: Sequelize.STRING,
+        defaultValue: '/Users/Mac/GraceHopper/Feminist-Toolkits/public/images/default.png'
     }
 });
