@@ -91,7 +91,7 @@ describe('User model', function () {
             var saltSpy;
 
             var createUser = function () {
-                return User.create({ email: 'obama@gmail.com', password: 'potus' });
+                return User.create({ email: 'obama@gmail.com', password: 'potus', name: 'Mr. President' });
             };
 
             beforeEach(function () {
@@ -133,7 +133,7 @@ describe('User model', function () {
         describe('sanitize method', function () {
 
             var createUser = function () {
-                return User.create({ email: 'obama@gmail.com', password: 'potus' });
+                return User.create({ email: 'obama@gmail.com', password: 'potus', name: 'Mr. President'});
             };
 
             it('should remove sensitive information from a user object', function () {
@@ -146,7 +146,60 @@ describe('User model', function () {
                 });
             });
         });
+   });
+
+    // Our tests below:
+    describe('email creation and validation', function () {
+
+        var buildBadEmail = User.build({ email: 'obamamail.com', password: 'potus', name: 'Mr. President'});
+        var buildWithNoEmail = User.build({ password: 'potus', name: 'Mr. President'});
+        var buildWithExistingEmail = User.build({ email: 'obama@gmail.com', password: '123', name: 'What Ever'});
+
+
+        beforeEach(function () {
+            return User.create({ email: 'obama@gmail.com', password: 'potus', name: 'Mr. President'});
+        })
+
+
+        it('rejects a bad email',
+           function (){
+                // return User.create({email: 'jackalope@bob.com', password: 'passwrd', name: 'Bob'})
+                return buildBadEmail.validate()
+                .then(function(response){
+                    // expect(response.id).to.be.undefined;
+                    expect(response).to.be.an.instanceOf(Error);
+                })
+            }
+        );
+
+        it('email cannot be null', function () {
+             return buildWithNoEmail.validate()
+             .then(function(response) {
+                expect(response).to.be.an.instanceOf(Error);
+             })
+           })
+
+        it('email has to be unique', function () {
+           return buildWithExistingEmail.save()
+            .then(function (result) {
+                expect(result).to.not.exist;
+            })
+            .catch(function (err) {
+                expect(err).to.exist;
+                expect(err.errors[0].message).to.equal('email must be unique')
+            })
+        })
 
     });
+    describe('name creation and validation', function(){
+        var buildWithNoName = User.build({ email: 'mynonameemail@gmail.com', password: '123'});
+
+        it('name cannot be null', function () {
+             return buildWithNoName.validate()
+             .then(function(response) {
+                expect(response).to.be.an.instanceOf(Error);
+             })
+           })
+    })
 
 });
