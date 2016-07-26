@@ -12,7 +12,7 @@ var db = require('../../../server/db/_db');
  *
  */
 
-describe('Products', function () {
+describe('Category', function () {
 
   /**
    * First we clear the database and recreate the tables before beginning each run
