@@ -4,12 +4,6 @@ var expect = require('chai').expect;
 var Category = require('../../../server/db/models/category');
 var db = require('../../../server/db/_db');
 
-/**
- *
- * These tests describe the model that you'll be writing in models/article.js
- *
- */
-
 describe('Category', function () {
 
   /**
@@ -19,12 +13,6 @@ describe('Category', function () {
     return db.sync({force: true});
   });
 
-
-  /**
-   * Your model should have two fields (both required): `Name` and `Description`.
-   *
-   * http://docs.sequelizejs.com/en/latest/docs/models-definition/#validations
-   */
   it('has name', function () {
     return Category.create({
       name: 'Migratory Birds',
@@ -44,7 +32,7 @@ describe('Category', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('notNull');
       });
-    
+
 
   });
 
@@ -61,5 +49,4 @@ describe('Category', function () {
       });
 
   });
-
 });
