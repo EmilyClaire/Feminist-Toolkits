@@ -4,14 +4,6 @@ var expect = require('chai').expect;
 var Product = require('../../../server/db/models/product');
 var db = require('../../../server/db/_db');
 
-/**
- *
- * Start here!
- *
- * These tests describe the model that you'll be writing in models/article.js
- *
- */
-
 describe('Products', function () {
 
   /**
@@ -95,8 +87,6 @@ describe('Products', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('notNull');
       });
-    
-
   });
 
   it('description cannot be empty', function () {
@@ -128,7 +118,6 @@ describe('Products', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('Validation error');
       });
-
   });
 
   it('requires name', function () {
@@ -143,7 +132,6 @@ describe('Products', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('notNull');
       });
-
   });
 
  it('inventory defaults to 0', function () {
@@ -183,5 +171,3 @@ describe('Products', function () {
     });
   });
 });
-
-//check out sequelize-express checkpoint for validation tests
