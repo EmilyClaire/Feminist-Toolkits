@@ -44,8 +44,21 @@ describe('Category', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('notNull');
       });
-    
+  });
 
+  it('name must be unique', function() {
+    return Category.create({
+      name: 'one'
+    }).then(function (){
+      var category = Category.build({
+        name: 'one'
+      });
+      return category.save()
+      .catch(function (error){
+        expect(error).to.be.an.instanceOf(Error);
+        expect(error.message).to.contain('Validation');
+      })
+    });
   });
 
   it('name cannot be empty', function () {
@@ -59,7 +72,5 @@ describe('Category', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('Validation error');
       });
-
   });
-
 });

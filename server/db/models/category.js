@@ -12,6 +12,6 @@ module.exports = db.define('category', {
         unique: true,
         validate: {
             notEmpty: true
-        }
+      }
     }
 });
