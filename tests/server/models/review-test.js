@@ -5,7 +5,7 @@ var Sequelize = require('sequelize');
 
 var db = require('../../../server/db');
 
-var Review = db.model('review');
+var Review = require('../../../server/db/models/review.js')
 
 describe('Review model', function () {
 
@@ -23,34 +23,37 @@ describe('Review model', function () {
     );
 
     it('Stars # must be less than 6', function () {
-        return Review.create({stars: 7, content: 'This is terrible. 1234567890.'})
+        return Review.build({stars: 7, content: 'This is terrible. 1234567890.'})
+        .validate()
         .then(function(result){
             expect(result).to.not.exist;
         })
         .catch(function(err){
             expect(err).to.exist;
-            expect(err.errors[0].message).to.equal('Validation max failed')
+            expect(err.actual.errors[0].message).to.equal('Validation max failed')
         })
     });
     it('Stars # must be greater than 0', function () {
-        return Review.create({stars: 0, content: 'This is just awful. 1234567890.'})
+        return Review.build({stars: 0, content: 'This is just awful. 1234567890.'})
+        .validate()
         .then(function(result){
             expect(result).to.not.exist;
         })
         .catch(function(err){
             expect(err).to.exist;
-            expect(err.errors[0].message).to.equal('Validation min failed')
+            expect(err.actual.errors[0].message).to.equal('Validation min failed')
         })
     });
     it('content must be at least 20 chars', function () {
-       return Review.create({stars: 4, content: 'Bad.'})
+       return Review.build({stars: 4, content: 'Bad.'})
+        .validate()
         .then(function(result){
-            console.log('resultShort:',result)
             expect(result).to.not.exist;
         })
         .catch(function(err){
             expect(err).to.exist;
-            expect(err.errors[0].message).to.equal('Validation len failed')
+            expect(err.actual.errors[0].message).to.equal('Validation len failed')
+
         })
     });
 });
