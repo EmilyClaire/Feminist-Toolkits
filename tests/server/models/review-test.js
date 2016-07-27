@@ -5,8 +5,8 @@ var Sequelize = require('sequelize');
 
 var db = require('../../../server/db');
 
-
 var Review = require('../../../server/db/models/review.js')
+
 
 describe('Review model', function () {
 
@@ -24,9 +24,9 @@ describe('Review model', function () {
     );
 
     it('Stars # must be less than 6', function () {
+
         return Review.build({stars: 7, content: 'This is terrible. 1234567890.'})
         .validate()
-
         .then(function(result){
             expect(result).to.not.exist;
         })
@@ -38,6 +38,7 @@ describe('Review model', function () {
     it('Stars # must be greater than 0', function () {
         return Review.build({stars: 0, content: 'This is just awful. 1234567890.'})
         .validate()
+
 
         .then(function(result){
             expect(result).to.not.exist;
@@ -52,7 +53,6 @@ describe('Review model', function () {
        return Review.build({stars: 4, content: 'Bad.'})
         .validate()
         .then(function(result){
-
             expect(result).to.not.exist;
         })
         .catch(function(err){
