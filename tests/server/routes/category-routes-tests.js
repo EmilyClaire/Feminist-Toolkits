@@ -51,7 +51,7 @@ describe('Categories Route:', function () {
      * using the GET /categories route
      *
      */
-    it('returns an article if there is one in the DB', function () {
+    it('returns an a category if there is one in the DB', function () {
 
       var category = Category.build({
         name: 'Banana'
@@ -72,27 +72,25 @@ describe('Categories Route:', function () {
     });
 
     /**
-     * Problem 3
-     * Save a second article in the database using our model, then retrieve it
+     * Save a second category in the database using our model, then retrieve it
      * using the GET /articles route
      *
      */
     it('returns another article if there is one in the DB', function () {
 
-      var article = Article.build({
-        title: 'Another Test Article',
-        content: 'Another test body'
+      var category = Category.build({
+        name: 'Another Test Category'
       });
 
-      return article.save().then(function () {
+      return category.save().then(function () {
 
         return agent
-          .get('/articles')
+          .get('/categories')
           .expect(200)
           .expect(function (res) {
             expect(res.body).to.be.an.instanceOf(Array);
-            expect(res.body[0].content).to.equal('Test body');
-            expect(res.body[1].content).to.equal('Another test body');
+            expect(res.body[0].name).to.equal('Banana');
+            expect(res.body[1].name).to.equal('Another test Category');
           });
 
       });
@@ -209,68 +207,66 @@ describe('Categories Route:', function () {
   });
 
   /**
-   * Series of tests to test updating of Articles using a PUT
-   * request to /articles/:id
+   * Series of tests to test updating of Categores using a PUT
+   * request to /categories/:id
    */
-  describe('PUT /articles/:id', function () {
+  describe('PUT /categories/:id', function () {
 
-    var article;
+    var category;
 
     before(function () {
 
-      return Article.findOne({
+      return Category.findOne({
         where: {
-          title: 'Awesome POST-Created Article'
+          name: 'Awesome POST-Created Category'
         }
-      }).then(function (_article) {
-        article = _article;
+      }).then(function (_category) {
+        catergory = _category;
       }).catch(function(e) { console.error(e.message); });
     });
 
     /**
-     * Test the updating of an article
-     * Here we don't get back just the article, we get back a Object
+     * Test the updating of an Category
+     * Here we don't get back just the category, we get back a Object
      * of this type:
      *
      * {
      *   message: 'Updated successfully'
-     *   article: {
+     *   Category: {
      *     id: ...
-     *     title: ...
-     *     content: ...
+     *     name: ...
      *   }
      * }
      */
-    it('updates an article', function () {
+    it('updates a category', function () {
 
       return agent
-        .put('/articles/' + article.id)
+        .put('/categories/' + category.id)
         .send({
-          title: 'Awesome PUT-Updated Article'
+          title: 'Awesome PUT-Updated Category'
         })
         .expect(200)
         .expect(function (res) {
           expect(res.body.message).to.equal('Updated successfully');
-          expect(res.body.article.id).to.not.be.an('undefined');
-          expect(res.body.article.title).to.equal('Awesome PUT-Updated Article');
-          expect(res.body.article.content).to.equal('Can you believe I did this in a test?');
+          expect(res.body.category.id).to.not.be.an('undefined');
+          expect(res.body.category.name).to.equal('Awesome PUT-Updated Category');
         });
 
     });
 
     it('saves updates to the DB', function () {
 
-      return Article.findById(article.id).then(function (article) {
-        expect(article).to.exist;
-        expect(article.title).to.equal('Awesome PUT-Updated Article');
+      return Category.findById (category.id).then(function (category) {
+        expect(category).to.exist;
+        expect(category.name).to.equal('Awesome PUT-Updated Article');
       });
 
     });
 
     it('gets 500 for invalid update', function () {
       return agent
-        .put('/articles/' + article.id)
-        .send({ title: '' })
+        .put('/categories/' + category.id)
+        .send({ name: '' })
         .expect(500);
     });
 
