@@ -9,25 +9,19 @@ var Review = require('./models/review');
 var Product = require('./models/product');
 var Category = require('./models/category');
 
-// var CategoryProducts = db.define('CategoryProducts', {
-//   role: Sequelize.STRING
-// });
+//Since we required in the models, we can now make changes to them that will persist in memory - such as setting up relations!
+Category.belongsToMany(Product, { through: 'categoryProducts' }); 
+Product.belongsToMany(Category, { through: 'categoryProducts' });
 
-// var ProductCategories = db.define('product_categories', {
-//   role: Sequelize.STRING
-// });
+Review.belongsTo(Product);
+Product.hasMany(Review);
 
+Review.belongsTo(User);
+User.hasMany(Review);
 
-// Product.belongsToMany(Category, {
-//   through: CategoryProducts
-// }); // Product.getCategories() -- n:m
+Order.belongsTo(User);
+User.hasMany(Order);
 
-// Review.belongsTo(Product) -- 1:1
-// Review.belongsTo(User) -- 1:1
-// Product.hasMany(Review) -- 1:m
-// User.hasMany(Review) -- 1:m
+Order.hasMany(Product);
 
-// Order.hasMany(Product) -- 1:m
-// Order.belongsTo(User) - takes userId and puts it on the orders table -- 1:1
-// User.hasMany(Orders) - creates a relations table in database -- 1:m
 module.exports = db;

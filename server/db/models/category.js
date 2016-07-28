@@ -15,8 +15,6 @@ var Category = db.define('category', {
     }
 });
 
-Category.belongsToMany(Product, { through: 'categoryProducts' }); // Category.getProducts() -- n:m
 
-Product.belongsToMany(Category, { through: 'categoryProducts' });
 
 module.exports = Category;
