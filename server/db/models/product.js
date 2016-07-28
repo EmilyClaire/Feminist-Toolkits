@@ -1,10 +1,8 @@
 'use strict';
-var _ = require('lodash');
 var Sequelize = require('sequelize');
 
 var db = require('../_db');
 
-//testing
 module.exports = db.define('product', {
     name: {
         type: Sequelize.STRING,

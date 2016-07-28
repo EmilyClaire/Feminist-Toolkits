@@ -15,4 +15,4 @@ module.exports = db.define('review', {
     type: Sequelize.TEXT,
     validate: {len: 20}
   }
-},{})
+});
