@@ -4,14 +4,18 @@ app.factory('ProductsFactory', function ($http) {
 
   var ProductsFactory = {};
 
+  function getData (response) {
+    return response.data;
+  }
+
   ProductsFactory.fetchAll = function () {
     return $http.get('/api/products')
-    .then(function (response) { return response.data; });
+    .then(getData);
   };
 
   ProductsFactory.fetchById = function (id) {
     return $http.get('/api/products/' + id)
-    .then(function (response) { return response.data; });
+    .then(getData);
   };
 
   return ProductsFactory;

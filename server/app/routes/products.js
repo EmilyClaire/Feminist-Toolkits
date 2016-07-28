@@ -1,10 +1,7 @@
 'use strict';
 var router = require('express').Router();
 
-var _ = require('lodash');
 var Product = require('../../db/models/product');
-var Categories = require('../../db/models/product');
-var Reviews = require('../../db/models/review');
 
 router.get('/', function (req, res, next) {
     Product.findAll()
@@ -20,21 +17,12 @@ router.get('/:id', function (req, res, next) {
       if (product) {
         res.json(product);
       } else {
-        res.status(404).send();
+        var err = new Error('Product not found');
+        err.status = 404;
+        next(err);
       }
     })
     .catch(next);
-})
-
-// findAll,
-// find(by Category - query or param)
-// find(by Name - includes, not exact match - query or param)
-// findbyId
-
-// get all reviews for product
-
-// Create/post
-// Edit/Put
-// Delete
+});
 
 module.exports = router;
