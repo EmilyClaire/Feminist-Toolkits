@@ -11,22 +11,47 @@ var OrderProducts=require('../../../server/db/models/order-products');
 var Promise=require('bluebird');
 
 describe('Relations',function(){ 
+
+  var categoriesArr;
+  var productsArr;
+  var reviewsArr;
+  var ordersArr;
+  var user;
+
   beforeEach(function () {
     return db.sync({force: true});
   });
-  describe('Category',function(){
-    it('can be associated with multiple products',function(){
-      var productsArr;
-      var category1=Category.create({
-               name: 'Leisure'});
+  
+  beforeEach(function (done) {
+      var category1=Category.create({name: 'Leisure'});
+      var category2=Category.create({name: 'Evil'});
       var product1=Product.create({ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00});
       var product2=Product.create({ name: 'Unicorn puppy', description: '2nd most beautiful creature', inventory: 10, currentPrice: 100.00});
-   
-      return Promise.all([category1,product1,product2])
-      .spread(function(category,product1,product2){
-        productsArr=[product1,product2]
-        return category.addProducts(productsArr);
+      var review1=Review.create({
+                 stars: 5,
+                  content: 'the best damn unicorn i ever rode'});
+      var review2=Review.create({
+                 stars: 1,
+                  content: 'the worst evilest robot i ever saw'});
+      var user1=User.create({email: 'bob@bob.com', name: 'bob', password:'ohman',isAdmin:'false'});
+      var order1=Order.create({shippingAddress: 'the cupboard'});
+      var order2=Order.create({shippingAddress: 'faraway'});
+
+      Promise.all([category1,category2,product1,product2,review1,review2,user1,order1,order2])
+      .spread(function(category1,category2,product1,product2,review1,review2,user1,order1,order2){
+        categoriesArr=[category1,category2];
+        productsArr=[product1,product2];
+        reviewsArr=[review1,review2];
+        user=user1;
+        ordersArr=[order1,order2]
+        done();
       })
+  });
+
+
+  describe('Category',function(){
+    it('belongs to many products',function(){
+     return categoriesArr[0].addProducts(productsArr)
       .then(function(){
         return Category.findOne({
               where: { name: 'Leisure' },
@@ -42,19 +67,8 @@ describe('Relations',function(){
   })
 
   describe('Product',function(){
-    it('can be associated with multiple categories',function(){
-      var categoriesArr;
-      var category1=Category.create({
-               name: 'Leisure'});
-      var category2=Category.create({
-               name: 'Evil'});
-      var product=Product.create({ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00});
-
-      return Promise.all([product,category1,category2])
-      .spread(function(product,category1,category2){
-        categoriesArr=[category1,category2]
-        return product.addCategories(categoriesArr);
-      })
+    it('belongs to many categories',function(){
+      return productsArr[0].addCategories(categoriesArr)
       .then(function(){
         return Product.findOne({
               where: { name: 'Unicorn robot'},
@@ -67,26 +81,7 @@ describe('Relations',function(){
       })
     })
     it('has many reviews',function(){
-        var reviewsArr;
-        var review1=Review.create({
-                 stars: 5,
-                  content: 'the best damn unicorn i ever rode'});
-        var review2=Review.create({
-                 stars: 1,
-                  content: 'the worst evilest robot i ever saw'});
-        var product=Product.create({ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00});
-
-        return Promise.all([product,review1,review2])
-        .spread(function(product,review1,review2){
-          reviewsArr=[review1,review2]
-          return product.addReviews(reviewsArr);
-        })
-        .then(function(){
-          return Product.findOne({
-                where: { name: 'Unicorn robot'},
-                include: { model: Review}
-              })
-        })
+        return productsArr[0].addReviews(reviewsArr)
         .then(function(product){
           return product.getReviews();
         })
@@ -104,12 +99,7 @@ describe('Relations',function(){
 
   describe('Review',function(){
     it('belongs to a product',function(){
-      var review1=Review.create({stars: 5,content: 'the best damn unicorn i ever rode'});
-      var product1=Product.create({ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00});
-      return Promise.all([review1,product1])
-      .spread(function(review,product){
-        return review.setProduct(product);
-      })
+      return reviewsArr[0].setProduct(productsArr[0])
       .then(function(review){
         return Review.findById(review.dataValues.id,{include: {model: Product}})
       })
@@ -121,46 +111,19 @@ describe('Relations',function(){
       })
     })
     it('belongs to a user',function(){
-      var review1=Review.create({stars: 5,content: 'the best damn unicorn i ever rode'});
-      var user1=User.create({email: 'bob@bob.com', name: 'bob', password:'ohman',isAdmin:'false'});
-      return Promise.all([review1,user1])
-      .spread(function(review,user){
-        return review.setUser(user);
-      })
-      .then(function(review){
-        return Review.findById(review.dataValues.id,{include: {model: User}})
-      })
+      return reviewsArr[0].setUser(user)
       .then(function(review){
         return review.getUser();
       })
-      .then(function(user){
-        expect(user.dataValues.name).to.equal('bob');
+      .then(function(theUser){
+        expect(theUser.dataValues.name).to.equal('bob');
       });
     })
   })
 
   describe('User',function(){
     it('has many reviews',function(){
-        var reviewsArr;
-        var review1=Review.create({
-                 stars: 5,
-                  content: 'the best damn unicorn i ever rode'});
-        var review2=Review.create({
-                 stars: 1,
-                  content: 'the worst evilest robot i ever saw'});
-        var user1=User.create({email: 'bob@bob.com', name: 'bob', password:'ohman',isAdmin:'false'});
-
-        return Promise.all([user1,review1,review2])
-        .spread(function(user1,review1,review2){
-          reviewsArr=[review1,review2]
-          return user1.addReviews(reviewsArr);
-        })
-        .then(function(){
-          return User.findOne({
-                where: { name: 'bob'},
-                include: { model: Review}
-              })
-        })
+        return user.addReviews(reviewsArr)
         .then(function(user){
           return user.getReviews();
         })
@@ -174,24 +137,9 @@ describe('Relations',function(){
         })
       })
     it('has many orders',function(){
-        var ordersArr;
-        var order1=Order.create({shippingAddress: 'the cupboard'});
-        var order2=Order.create({shippingAddress: 'faraway'});
-        var user1=User.create({email: 'bob@bob.com', name: 'bob', password:'ohman',isAdmin:'false'});
-
-        return Promise.all([user1,order1,order2])
-        .spread(function(user1,order1,order2){
-          ordersArr=[order1,order2]
-          return user1.addOrders(ordersArr);
-        })
-        .then(function(){
-          return User.findOne({
-                where: { name: 'bob'},
-                include: { model: Order}
-              })
-        })
-        .then(function(user){
-          return user.getOrders();
+        return user.addOrders(ordersArr)
+        .then(function(theUser){
+          return theUser.getOrders();
         })
         .then(function(orders){
           var orderAdresses=[]
@@ -206,16 +154,7 @@ describe('Relations',function(){
 
   describe('Order',function(){
     it('has many products',function(){
-      var productsArr;
-      var product1=Product.create({ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00});
-      var product2=Product.create({ name: 'Unicorn puppy', description: '2nd most beautiful creature', inventory: 10, currentPrice: 100.00});
-      var order=Order.create({shippingAddress: 'the cupboard'});
-
-      return Promise.all([order,product1,product2])
-      .spread(function(order,product1,product2){
-        productsArr=[product1,product2]
-        return order.addProducts(productsArr);
-      })
+      return ordersArr[0].addProducts(productsArr)
       .then(function(){
         return Order.findOne({
               where: { shippingAddress: 'the cupboard'},
@@ -236,12 +175,7 @@ describe('Relations',function(){
       })
     })
     it('belongs to a user',function(){
-      var order1=Order.create({shippingAddress: 'the cupboard'});
-      var user1=User.create({email: 'bob@bob.com', name: 'bob', password:'ohman',isAdmin:'false'});
-      return Promise.all([order1,user1])
-      .spread(function(order,user){
-        return order.setUser(user);
-      })
+      return ordersArr[0].setUser(user)
       .then(function(order){
         return Order.findById(order.dataValues.id,{include: {model: User}})
       })
