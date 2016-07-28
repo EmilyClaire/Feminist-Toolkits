@@ -19,10 +19,18 @@ describe('Reviews Route', function () {
         app = require('../../../server/app')(db);
         User = db.model('user');
         Review = db.model('review');
-        Product = db.model('product');
     });
 
 	describe('Get reviews', function () {
+    var review1 = {stars: 2, content: 'Twenty characters of content', userId: 123};
+    var review2 = {stars: 4, content: 'Another twenty characters.', userId: 1}
+
+    beforeEach('Post reviews', function(){
+      Review.create(review1)
+      .then(function () { Review.create(review2)})
+      .catch(function (err) { console.log(err) });
+    });
+
 
 		it('should get an array', function (done) {
 			supertest(app).get('/api/reviews')
@@ -34,7 +42,7 @@ describe('Reviews Route', function () {
 				.end(done);
 		});
 
-    it('should get an array', function (done) {
+    it('should get an array filtered by user', function (done) {
       supertest(app).get('/api/reviews/user/123')
         .expect(200)
         .expect(function(res) {
@@ -45,34 +53,47 @@ describe('Reviews Route', function () {
     });
 	});
 
-	// describe('Authenticated request', function () {
+	describe('Authenticated user posts review', function () {
 
-	// 	var loggedInAgent;
+		var loggedInAgent;
 
-	// 	var userInfo = {
-	// 		email: 'joe@gmail.com',
-	// 		password: 'shoopdawoop'
-	// 	};
+		var userInfo = {
+			email: 'joe@gmail.com',
+			password: 'shoopdawoop',
+      name: 'User Guy'
+		};
+    var reviewToPost = {
+      stars: 3,
+      content: 'Product def exists. It is kinda okay.'
+    }
 
-	// 	beforeEach('Create a user', function (done) {
-	// 		return User.create(userInfo).then(function (user) {
- //                done();
- //            }).catch(done);
-	// 	});
+		beforeEach('Create a user', function (done) {
+			return User.create(userInfo).then(function (user) {
+          done();
+        }).catch(done);
+		});
 
-	// 	beforeEach('Create loggedIn user agent and authenticate', function (done) {
-	// 		loggedInAgent = supertest.agent(app);
-	// 		loggedInAgent.post('/login').send(userInfo).end(done);
-	// 	});
+		beforeEach('Create loggedIn user agent and authenticate', function (done) {
+			loggedInAgent = supertest.agent(app);
+			loggedInAgent.post('/login').send(userInfo).end(done);
+		});
 
-	// 	it('should get with 200 response and with an array as the body', function (done) {
-	// 		loggedInAgent.get('/api/members/secret-stash').expect(200).end(function (err, response) {
-	// 			if (err) return done(err);
-	// 			expect(response.body).to.be.an('array');
-	// 			done();
-	// 		});
-	// 	});
+		it('should post with 201 response', function (done) {
+			loggedInAgent.post('/api/reviews', reviewToPost).expect(201).end(function (err, response) {
+        // console.log(response.body);
+				if (err) return done(err);
+				expect(response.body.stars).to.equal(3);
+        //test that userId gets returned, after relations are set up (uId==1??)
+        //expect(response.body.userId).to.exist;
+				done();
+			});
+		});
 
-	// });
-
+	});
+  // var adminInfo = {
+    //   email: 'admin@site.com',
+    //   name: 'Ms. Admin',
+    //   password: 'Imtheboss',
+    //   isAdmin: true
+    // }
 });
