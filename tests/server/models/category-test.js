@@ -19,12 +19,6 @@ describe('Category Model', function () {
     return db.sync({force: true});
   });
 
-
-  /**
-   * Your model should have two fields (both required): `Name` and `Description`.
-   *
-   * http://docs.sequelizejs.com/en/latest/docs/models-definition/#validations
-   */
   it('has name', function () {
     return Category.create({
       name: 'Migratory Birds',

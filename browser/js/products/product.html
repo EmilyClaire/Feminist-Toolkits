@@ -1,0 +1,12 @@
+<div class="product">
+  <p>
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <img ng-src="{{ product.photoUrl }}">
+    <p>Inventory: {{ product.inventory }}</p>
+    <p>Price: {{ product.currentPrice }} USD</p>
+  </p>
+    <!-- DIRECTIVE: -->
+  <category-list categories="product.categories"></category-list>
+
+</div>
