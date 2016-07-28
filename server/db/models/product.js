@@ -1,10 +1,8 @@
 'use strict';
-var _ = require('lodash');
 var Sequelize = require('sequelize');
 
 var db = require('../_db');
 
-//testing
 module.exports = db.define('product', {
     name: {
         type: Sequelize.STRING,
@@ -22,7 +20,7 @@ module.exports = db.define('product', {
     },
     inventory: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,        
+        defaultValue: 0,
         validate: {
             min: 0
         }
