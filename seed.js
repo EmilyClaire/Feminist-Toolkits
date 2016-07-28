@@ -20,6 +20,8 @@ name in the environment files.
 var chalk = require('chalk');
 var db = require('./server/db');
 var User = db.model('user');
+var Product = db.model('product');
+// var Category = db.category('category');
 var Promise = require('sequelize').Promise;
 
 var seedUsers = function () {
@@ -43,9 +45,50 @@ var seedUsers = function () {
 
 };
 
+var seedProducts = function () {
+
+    var products = [
+        {
+            name: 'Robot Unicorn',
+            description: 'An essential tool for any delicate flower',
+            inventory: 20,
+            currentPrice: 10.50,
+            photoUrl: '/images/robot-unicorn.jpg'
+        },
+        {
+            name: 'Baking kit',
+            description: 'Bake amazing things',
+            inventory: 20,
+            currentPrice: 10.50,
+            photoUrl: '/images/robot-unicorn.jpg'
+        },
+        {
+            name: 'Skirt',
+            description: 'An essential tool for any delicate flower',
+            inventory: 20,
+            currentPrice: 10.50,
+            photoUrl: '/images/robot-unicorn.jpg'
+        },
+        {
+            name: 'Pastel pants',
+            description: 'An essential tool for any delicate flower',
+            inventory: 30,
+            currentPrice: 20.50,
+            photoUrl: '/images/robot-unicorn.jpg'
+        }
+
+    ];
+
+    var creatingProducts = products.map(function (productObj) {
+        return Product.create(productObj);
+    });
+
+    return Promise.all(creatingProducts);
+};
+
 db.sync({ force: true })
     .then(function () {
-        return seedUsers();
+        return Promise.all([/*seedUsers(), */seedProducts()]);
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));
@@ -55,3 +98,4 @@ db.sync({ force: true })
         console.error(err);
         process.exit(1);
     });
+
