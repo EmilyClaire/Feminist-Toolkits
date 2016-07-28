@@ -1,6 +1,5 @@
 'use strict';
 var Sequelize = require('sequelize');
-var Product = require('./product');
 var db = require('../_db');
 
 var Category = db.define('category', {
