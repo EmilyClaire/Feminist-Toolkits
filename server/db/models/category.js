@@ -1,5 +1,3 @@
-//This is the category model.
-
 'use strict';
 var Sequelize = require('sequelize');
 var Product = require('./product');
@@ -14,7 +12,5 @@ var Category = db.define('category', {
         }
     }
 });
-
-
 
 module.exports = Category;
