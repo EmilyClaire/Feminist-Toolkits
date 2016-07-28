@@ -22,6 +22,7 @@ describe('Reviews Route', function () {
     });
 
 	describe('Get reviews', function () {
+
     var review1 = {stars: 2, content: 'Twenty characters of content', userId: 1};
     var review2 = {stars: 4, content: 'Another twenty characters.', userId: 1}
 
@@ -44,6 +45,7 @@ describe('Reviews Route', function () {
 
     it('should get an array filtered by user', function (done) {
       supertest(app).get('/api/reviews/user/1')
+
         .expect(200)
         .expect(function(res) {
           if (!Array.isArray(res.body)) {
@@ -79,7 +81,9 @@ describe('Reviews Route', function () {
 		});
 
 		it('should post with 201 response', function (done) {
+
 			loggedInAgent.post('/api/reviews').send(reviewToPost).expect(201).end(function (err, response) {
+
         // console.log(response.body);
 				if (err) return done(err);
 				expect(response.body.stars).to.equal(3);
