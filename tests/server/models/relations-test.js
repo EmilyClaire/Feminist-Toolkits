@@ -7,8 +7,9 @@ var Order = require('../../../server/db/models/order');
 var Category = require('../../../server/db/models/category');
 var Review = require('../../../server/db/models/review');
 var db = require('../../../server/db/_db');
+var OrderProducts=require('../../../server/db/models/order-products');
 var Promise=require('bluebird');
-
+ 
 describe('Category',function(){
   beforeEach(function () {
     return db.sync({force: true});
@@ -19,7 +20,7 @@ describe('Category',function(){
              name: 'Leisure'});
     var product1=Product.create({ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00});
     var product2=Product.create({ name: 'Unicorn puppy', description: '2nd most beautiful creature', inventory: 10, currentPrice: 100.00});
-
+ 
     return Promise.all([category1,product1,product2])
     .spread(function(category,product1,product2){
       productsArr=[product1,product2]
@@ -261,5 +262,33 @@ describe('Order',function(){
     .then(function(user){
       expect(user.dataValues.name).to.equal('bob');
     });    
+  })
+  it('when you getProducts(), products have a priceAtPurchase which does not change',function(){
+    var product1=Product.create({ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00});
+    var order=Order.create({shippingAddress: 'the cupboard'});
+    return Promise.all([order,product1])
+    .spread(function(order,product){
+      product1=product;
+      return order.addProduct(product, {priceAtPurchase: product.currentPrice});
+    })
+    .then(function(){
+      product1.currentPrice=0;
+      return product1.save();
+    })
+    .then(function(product){
+      expect(product.currentPrice).to.equal(0);
+    })
+    .then(function(){
+      return Order.findOne({
+            where: { shippingAddress: 'the cupboard'},
+            include: { model: Product}
+          })
+    })
+    .then(function(order){
+      return OrderProducts.findOne({where: {productId: product1.id}})
+    })
+    .then(function(product){
+      expect(product.priceAtPurchase).to.equal(100.00);
+    }) 
   })
 })
