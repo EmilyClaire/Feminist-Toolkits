@@ -2,6 +2,7 @@
 var router = require('express').Router();
 
 var Product = require('../../db/models/product');
+var Review = require('../../db/models/review');
 
 router.get('/', function (req, res, next) {
     Product.findAll()
@@ -24,5 +25,17 @@ router.get('/:id', function (req, res, next) {
     })
     .catch(next);
 });
+
+router.get('/:id/reviews', function (req, res, next) {
+    Review.findAll({
+        where: {
+            productId: req.params.id
+        }
+    })
+    .then(function (reviews) {
+        res.json(reviews);
+    })
+    .catch(next);
+})
 
 module.exports = router;
