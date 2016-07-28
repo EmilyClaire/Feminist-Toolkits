@@ -5,7 +5,6 @@
   "main": "server/start.js",
   "scripts": {
     "start": "nodemon --watch server -e js,html server/start.js",
-    "seed": "node ./seed",
     "postinstall": "gulp build"
   },
   "engines": {

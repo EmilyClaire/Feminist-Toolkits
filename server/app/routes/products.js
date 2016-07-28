@@ -7,7 +7,6 @@ var Categories = require('../../db/models/product');
 var Reviews = require('../../db/models/review');
 
 router.get('/', function (req, res, next) {
-    console.log('hello Annika');
     Product.findAll()
     .then(function (products) {
         res.json(products);

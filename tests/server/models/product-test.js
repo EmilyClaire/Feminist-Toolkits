@@ -4,14 +4,6 @@ var expect = require('chai').expect;
 var Product = require('../../../server/db/models/product');
 var db = require('../../../server/db/_db');
 
-/**
- *
- * Start here!
- *
- * These tests describe the model that you'll be writing in models/article.js
- *
- */
-
 describe('Products', function () {
 
   /**
@@ -33,13 +25,13 @@ describe('Products', function () {
       name: 'Migratory Birds',
       description: description,
       inventory: 10,
-      currentPrice: '5.50',
+      currentPrice: 5.50,
       photoUrl: "www.google.com"
     }).then(function (savedProduct) {
       expect(savedProduct.name).to.equal('Migratory Birds');
       expect(savedProduct.description).to.equal(description);
       expect(savedProduct.inventory).to.equal(10);
-      expect(savedProduct.currentPrice).to.equal('5.50');
+      expect(savedProduct.currentPrice).to.equal(5.50);
       expect(savedProduct.photoUrl).to.equal("www.google.com");
     });
   });
@@ -62,7 +54,7 @@ describe('Products', function () {
     var product = Product.build({
       name: 'My Second Product',
       description: description,
-      currentPrice: '-5.20'
+      currentPrice: -5.2
     });
 
     return product.validate()
@@ -77,7 +69,7 @@ describe('Products', function () {
       name: 'Migratory Birds',
       description: description,
       inventory: 10,
-      currentPrice: '5.50',
+      currentPrice: 5.50,
     }).then(function (savedProduct) {
       expect(savedProduct.photoUrl).to.equal('/Users/Mac/GraceHopper/Feminist-Toolkits/public/images/default.png');
     });
@@ -87,7 +79,7 @@ describe('Products', function () {
 
     var product = Product.build({
       name: 'My Second Product',
-      currentPrice: '5.20'
+      currentPrice: 5.2
     });
 
     return product.validate()
@@ -95,8 +87,6 @@ describe('Products', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('notNull');
       });
-
-
   });
 
   it('description cannot be empty', function () {
@@ -104,7 +94,7 @@ describe('Products', function () {
     var product = Product.build({
       name: 'Apple',
       description: '',
-      currentPrice: '1.10'
+      currentPrice: 1.1
     });
 
     return product.validate()
@@ -120,7 +110,7 @@ describe('Products', function () {
     var product = Product.build({
       name: '',
       description: 'Some more wonderful text',
-      currentPrice: '1.20'
+      currentPrice: 1.2
     });
 
     return product.validate()
@@ -128,14 +118,13 @@ describe('Products', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('Validation error');
       });
-
   });
 
   it('requires name', function () {
 
     var product = Product.build({
       description: 'Some more wonderful text',
-      currentPrice: '1.20'
+      currentPrice: 1.2
     });
 
     return product.validate()
@@ -143,14 +132,13 @@ describe('Products', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('notNull');
       });
-
   });
 
  it('inventory defaults to 0', function () {
     return Product.create({
       name: 'Migratory Birds2',
       description: 'testing testing testing',
-      currentPrice: '1.20'
+      currentPrice: 1.2
     }).then(function (savedProduct) {
       expect(savedProduct.inventory).to.equal(0);
     });
@@ -175,7 +163,7 @@ describe('Products', function () {
     return Product.create({
       name: 'WALL-E',
       description: description,
-      currentPrice: '1.20'
+      currentPrice: 1.2
     }).then(function(result) {
       expect(result).to.be.an('object');
       expect(result.name).to.equal('WALL-E');
@@ -183,5 +171,3 @@ describe('Products', function () {
     });
   });
 });
-
-//check out sequelize-express checkpoint for validation tests

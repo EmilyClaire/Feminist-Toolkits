@@ -28,7 +28,7 @@ module.exports = db.define('product', {
         }
     },
     currentPrice: {
-        type: Sequelize.DECIMAL(10,2),
+        type: Sequelize.FLOAT(10,2),
         allowNull: false,
         validate: {
             min: 0

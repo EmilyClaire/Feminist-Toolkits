@@ -52,7 +52,28 @@ var seedProducts = function () {
             name: 'Robot Unicorn',
             description: 'An essential tool for any delicate flower',
             inventory: 20,
-            currentPrice: '10.50',
+            currentPrice: 10.50,
+            photoUrl: '/images/robot-unicorn.jpg'
+        },
+        {
+            name: 'Baking kit',
+            description: 'Bake amazing things',
+            inventory: 20,
+            currentPrice: 10.50,
+            photoUrl: '/images/robot-unicorn.jpg'
+        },
+        {
+            name: 'Skirt',
+            description: 'An essential tool for any delicate flower',
+            inventory: 20,
+            currentPrice: 10.50,
+            photoUrl: '/images/robot-unicorn.jpg'
+        },
+        {
+            name: 'Pastel pants',
+            description: 'An essential tool for any delicate flower',
+            inventory: 30,
+            currentPrice: 20.50,
             photoUrl: '/images/robot-unicorn.jpg'
         }
 
