@@ -16,6 +16,20 @@
 </head>
 <body ng-app="FullstackGeneratedApp">
     <navbar></navbar>
-    <div id="main" ui-view></div>
+<!--     <div id="main" class="container-fluid" ui-view></div> -->
+
+
+    <div id="main" class="container-fluid">
+
+      <div class="col-xs-2">
+        <side-bar></side-bar>
+      </div>
+
+      <div class="col-xs-10">
+        <ui-view></ui-view>
+      </div>
+
+    </div>
+
 </body>
 </html>

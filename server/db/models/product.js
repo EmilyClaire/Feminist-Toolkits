@@ -22,13 +22,13 @@ module.exports = db.define('product', {
     },
     inventory: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,        
+        defaultValue: 0,
         validate: {
             min: 0
         }
     },
     currentPrice: {
-        type: Sequelize.FLOAT(10,2),
+        type: Sequelize.DECIMAL(10,2),
         allowNull: false,
         validate: {
             min: 0
