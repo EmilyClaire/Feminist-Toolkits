@@ -53,7 +53,7 @@ describe('Reviews Route', function () {
     });
 	});
 
-	describe('Authenticated user posts review', function () {
+	describe('Authenticated user actions', function () {
 
 		var loggedInAgent;
 
@@ -88,6 +88,15 @@ describe('Reviews Route', function () {
 				done();
 			});
 		});
+
+    it('should delete with 200 response', function (done) {
+      loggedInAgent.delete('/api/reviews/2').expect(200).end(function (err, response) {
+        if (err) return done(err);
+        expect(response).to.equal(1);
+        done();
+      });
+    });
+
 
 	});
   // var adminInfo = {
