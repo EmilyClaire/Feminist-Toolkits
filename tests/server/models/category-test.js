@@ -4,11 +4,6 @@ var expect = require('chai').expect;
 var Category = require('../../../server/db/models/category');
 var db = require('../../../server/db/_db');
 
-/**
- *
- * These tests describe the model that you'll be writing in models/article.js
- *
- */
 
 describe('Category Model', function () {
 
