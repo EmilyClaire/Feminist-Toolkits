@@ -63,6 +63,11 @@
             return !!Session.user;
         };
 
+        //Uses the session factory to see if the user is an admin
+        this.isAdmin = function () {
+            return Session.user.isAdmin;
+        };
+
         this.getLoggedInUser = function (fromServer) {
 
             // If an authenticated session exists, we
