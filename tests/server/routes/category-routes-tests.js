@@ -36,8 +36,9 @@ describe('Categories Route', function () {
       guestAgent = supertest.agent(app);
     });
 
-    it('should get an array of Categories', function (done) {
-      guestAgent.get('/api/categories')
+    it('should get with 200 response and with an array as the body containing'
+       + ' banana, apple, pie' , function (done) {
+         guestAgent.get('/api/categories')
         .expect(200)
         .end(function(err, res){
           if(err) return done(err);
@@ -72,7 +73,8 @@ describe('Categories Route', function () {
       loggedInAgent.post('/login').send(userInfo).end(done);
     });
 
-    it('should get with 200 response and with an array as the body', function (done) {
+    it('should get with 200 response and with an array as the body containing'
+       + ' banana, apple, pie' , function (done) {
       loggedInAgent.get('/api/categories')
       .expect(200)
       .end(function (err, res) {
@@ -108,7 +110,8 @@ describe('Categories Route', function () {
       adminAgent.post('/login').send(admin).end(done);
     });
 
-    it('should get with 200 response and with an array as the body', function (done) {
+    it('should get with 200 response and with an array as the body containing'
+       + ' banana, apple, pie' , function (done) {
       adminAgent.get('/api/categories')
       .expect(200)
       .end(function (err, res) {
