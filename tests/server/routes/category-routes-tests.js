@@ -28,13 +28,28 @@ describe('Categories Route', function () {
     })
   });
 
-  describe('Unauthenticated categories request', function () {
+  describe('Unauthenticated user request', function () {
 
-    var guestAgent;
+    var guestAgent, checkCategories;
 
     beforeEach('Create guest agent', function () {
       guestAgent = supertest.agent(app);
+
+      checkCategories = function (done){
+         guestAgent.get('/api/categories')
+        .expect(200)
+        .end(function(err, res){
+          if(err) return done(err);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(3);
+          expect(res.body[0]).to.eql('banana');
+          expect(res.body[1]).to.eql('apple');
+          expect(res.body[2]).to.eql('pie');
+          done();
+        })
+      };
     });
+
 
     it('should get with 200 response and with an array as the body containing'
        + ' banana, apple, pie' , function (done) {
@@ -48,7 +63,37 @@ describe('Categories Route', function () {
           expect(res.body[1]).to.eql('apple');
           expect(res.body[2]).to.eql('pie');
           done();
-        })
+        });
+    });
+
+    it('Try to add a category and get a 403 error', function (done){
+      guestAgent.post('/api/categories').send({name: 'cheese'})
+      .expect(403)
+      .end(function(err, res){
+        if(err) return done(err);
+        expect(res.body).to.be.empty();
+        checkCategories();
+        done();
+      });
+    });
+
+  it('Try to edit a category and get a 403 error', function (done){
+      guestAgent.put('/api/categories').send({name: 'cheese'})
+      .expect(403)
+      .end(function(err, res){
+        if(err) return done(err);
+        expect(res.body).to.be.empty();
+        done();
+      });
+    });
+
+  it('Try to delete a category and get a 403 error', function (done){
+      guestAgent.delete('/api/categories').send({name: 'cheese'})
+      .expect(403)
+      .expect(function(err, res){
+        if(err) return done(err);
+        expect(res.body).to.be.empty();
+      });
     });
   });
 
