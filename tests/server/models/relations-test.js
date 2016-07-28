@@ -263,7 +263,7 @@ describe('Order',function(){
       expect(user.dataValues.name).to.equal('bob');
     });    
   })
-  it('when you getProducts(), products have a priceAtPurchase which does not change',function(){
+  it('products in orderProducts have a priceAtPurchase which is set once and does not change',function(){
     var product1=Product.create({ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00});
     var order=Order.create({shippingAddress: 'the cupboard'});
     return Promise.all([order,product1])
