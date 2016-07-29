@@ -53,28 +53,28 @@ var seedProducts = function () {
             description: 'An essential tool for any delicate flower',
             inventory: 20,
             currentPrice: 10.50,
-            photoUrl: '/images/robot-unicorn.jpg'
+            photoUrl: '/images/robot-unicorn.png'
         },
         {
             name: 'Baking kit',
-            description: 'Bake amazing things',
+            description: 'Eat the bears, don\'t feed them',
             inventory: 190,
             currentPrice: 15.00,
-            photoUrl: '/images/robot-unicorn.jpg'
+            photoUrl: '/images/cupcake-tools.jpg'
         },
         {
             name: 'Skirt',
-            description: '“I hate to hear you talk about all women as if they were fine ladies instead of rational creatures. None of us want to be in calm waters all our lives.” ― Jane Austen, Persuasion',
+            description: 'Don\'t be a bear, be a fairy',
             inventory: 107,
             currentPrice: 30.00,
             photoUrl: '/images/skirt.jpg'
         },
         {
-            name: 'Pastel pants',
-            description: 'An essential tool for any delicate flower',
-            inventory: 30,
-            currentPrice: 20.50,
-            photoUrl: '/images/robot-unicorn.jpg'
+            name: 'Dreams',
+            description: 'If you can dream it, you can do it',
+            inventory: 5,
+            currentPrice: 600,
+            photoUrl: '/images/dreams.jpg'
         }
 
     ];

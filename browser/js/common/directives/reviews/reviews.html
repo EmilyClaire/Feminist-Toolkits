@@ -1,0 +1,13 @@
+<reviews>
+  <h4>REVIEWS</h4>
+  <div class="row">
+    <div ng-repeat="review in reviews" class="col-xs-4">
+        <div>
+          <h5>
+            <span>{{ review.stars }}</span>
+          </h5>
+          <p>{{ review.content }}</p>
+        </div>
+    </div>
+  </div>
+</reviews>
