@@ -1,5 +1,4 @@
 var ensureAuthenticated = function (req, res, next) {
-    console.log('ensuring authenticated')
     if (req.isAuthenticated()) {
         next();
     } else {
@@ -8,8 +7,6 @@ var ensureAuthenticated = function (req, res, next) {
 };
 
 var ensureAdmin = function (req, res, next) {
-    console.log('ENSURING ADMIN')
-    console.log(req.user);
     if (req.user&&req.user.isAdmin) {
             console.log('passing, cuz')
             console.log(req.user);
