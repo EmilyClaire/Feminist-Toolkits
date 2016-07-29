@@ -14,5 +14,9 @@ var ensureAdmin = function (req, res, next) {
     }
 };
 
-//router.param
-module.exports={ensureAuthenticated: ensureAuthenticated, ensureAdmin: ensureAuthenticated}
+var ensureAppropriateUser=function(req,resource){
+    /*NOT MIDDLEWARE. For usage example, see 'router.get('/:id'...' in orders.js*/
+    return req.session.passport.user===resource.userId;
+}
+
+module.exports={ensureAuthenticated: ensureAuthenticated, ensureAdmin: ensureAdmin, ensureAppropriateUser: ensureAppropriateUser}
