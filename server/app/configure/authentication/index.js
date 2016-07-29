@@ -19,8 +19,6 @@ module.exports = function (app, db) {
 
     var User = db.model('user');
 
-    dbStore.sync();
-
     // First, our session middleware will set/read sessions from the request.
     // Our sessions will get stored in Mongo using the same connection from
     // mongoose. Check out the sessions collection in your MongoCLI.
@@ -73,4 +71,5 @@ module.exports = function (app, db) {
         require(path.join(__dirname, strategyName))(app, db);
     });
 
+    return dbStore.sync();
 };
