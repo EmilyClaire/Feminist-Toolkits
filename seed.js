@@ -21,6 +21,7 @@ var chalk = require('chalk');
 var db = require('./server/db');
 var User = db.model('user');
 var Product = db.model('product');
+var Review = db.model('review');
 // var Category = db.category('category');
 var Promise = require('sequelize').Promise;
 
@@ -86,9 +87,39 @@ var seedProducts = function () {
     return Promise.all(creatingProducts);
 };
 
+
+var seedReviews = function () {
+
+    var reviews = [
+        {
+            stars: 5,
+            content: 'The size is decent, but the garish colors takes away some of their cuteness. I considered spray painting them all gold, or better yet, two of each a rainbow color since we are going for "rainbows and unicorns."',
+            productId: 1
+        },
+        {
+            stars: 4,
+            content: 'Cute little unicorn figurines. We "hid" them in plain view around the house and everyone had fun finding them (on door frames, window sills, etc). They also made for cute table decorations. Every guest took one home with them, and at this price it was no trouble making sure we had more than enough.',
+            productId: 2
+        },
+        {
+            stars: 3,
+            content: 'I ordered these as cupcake toppers. They were perfect because they were a solid plastic and not that fuzzy plastic that is on some of these figurines. They were the right size for a standard size cupcake and the accent paint was not a problem at all.',
+            productId: 3
+        }
+    ];
+
+    var creatingReviews = reviews.map(function (reviewObj) {
+        return Review.create(reviewObj);
+    });
+
+    return Promise.all(creatingReviews);
+};
+
+
+
 db.sync({ force: true })
     .then(function () {
-        return Promise.all([/*seedUsers(), */seedProducts()]);
+        return Promise.all([/*seedUsers(), */seedProducts(), seedReviews()]);
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));
