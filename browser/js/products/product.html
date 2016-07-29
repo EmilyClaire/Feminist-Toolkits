@@ -2,11 +2,13 @@
   <p>
     <h3>{{ product.name }}</h3>
     <p>{{ product.description }}</p>
-    <img ng-src="{{ product.photoUrl }}">
+    <img height="400px" ng-src="{{ product.photoUrl }}">
     <p>Inventory: {{ product.inventory }}</p>
     <p>Price: {{ product.currentPrice }} USD</p>
+    <p ui-sref-active="active"><a ui-sref="reviews({productId: product.id})">Check out reviews for {{ product.name }}</a>
+    <p>Categories: {{  }}</p>
   </p>
     <!-- DIRECTIVE: -->
-  <category-list categories="product.categories"></category-list>
+
 
 </div>

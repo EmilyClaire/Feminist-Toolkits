@@ -1,4 +1,8 @@
 <section id="home">
-    <fullstack-logo></fullstack-logo>
-    <rando-greeting></rando-greeting>
+    <h2>WELCOME TO FEMINIST TOOL KITS</h2>
+    <h3>Top sellers:</h3>
+    <div ng-repeat="product in products">
+      <h3>{{ product.name }}</h3>
+      <img ng-src="{{ product.photoUrl }}" class="img-thumbnail">
+    </div>
 </section>
