@@ -93,18 +93,19 @@ var seedReviews = function () {
     var reviews = [
         {
             stars: 5,
-            content: 'The size is decent, but the garish colors takes away some of their cuteness. I considered spray painting them all gold, or better yet, two of each a rainbow color since we are going for "rainbows and unicorns."',
-            productId: 1
+            content: 'The size is decent, but the garish colors takes away some of their cuteness. I considered spray painting them all gold, or better yet, two of each a rainbow color since we are going for "rainbows and unicorns."'
         },
         {
             stars: 4,
-            content: 'Cute little unicorn figurines. We "hid" them in plain view around the house and everyone had fun finding them (on door frames, window sills, etc). They also made for cute table decorations. Every guest took one home with them, and at this price it was no trouble making sure we had more than enough.',
-            productId: 2
+            content: 'Cute little unicorn figurines. We "hid" them in plain view around the house and everyone had fun finding them (on door frames, window sills, etc). They also made for cute table decorations. Every guest took one home with them, and at this price it was no trouble making sure we had more than enough.'
         },
         {
             stars: 3,
-            content: 'I ordered these as cupcake toppers. They were perfect because they were a solid plastic and not that fuzzy plastic that is on some of these figurines. They were the right size for a standard size cupcake and the accent paint was not a problem at all.',
-            productId: 3
+            content: 'I ordered these as cupcake toppers. They were perfect because they were a solid plastic and not that fuzzy plastic that is on some of these figurines. They were the right size for a standard size cupcake and the accent paint was not a problem at all.'
+        },
+        {
+            stars: 5,
+            content: 'Dream interpretation and lucid dreaming helped me with uncovering the power of my subconscious mind. It teaches me the causes of dreaming, the meanings of common dreams as well as methods of analyzing my own dreams. The mysterious practice of lucid dreaming is supportive of having a realization about the power of my subconscious mind.'
         }
     ];
 
@@ -120,6 +121,11 @@ var seedReviews = function () {
 db.sync({ force: true })
     .then(function () {
         return Promise.all([/*seedUsers(), */seedProducts(), seedReviews()]);
+    })
+    .then(function (seedArray) {
+        return Promise.all(seedArray[1].map(function (review, i) {
+            return review.setProduct(seedArray[0][i]);
+        }));
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));
