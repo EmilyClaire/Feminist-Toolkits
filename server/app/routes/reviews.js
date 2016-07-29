@@ -3,20 +3,15 @@ var router = require('express').Router();
 module.exports = router;
 var db = require('../../db');
 var Review = db.model('review');
+var utils = require('./utils');
 
 // var _ = require('lodash');
 
 //insert as second arg of router.get before cb, if needed:
-// var ensureAuthenticated = function (req, res, next) {
-//     if (req.isAuthenticated()) {
-//         next();
-//     } else {
-//         res.status(401).end();
-//     }
-// };
+// ensureAuthenticated()
 
-router.get('/', function (req, res, next) {
-  Review.findAll()
+router.get('/product/:prodId', function (req, res, next) {
+  Review.findAll({where: {productId: req.params.prodId}})
   .then(function(reviewArr){
     res.json(reviewArr);
   })
@@ -31,8 +26,7 @@ router.get('/user/:userId', function (req, res, next) {
   .catch(function(err) { next(err); })
 });
 
-router.post('/', function (req, res, next) {
-  //add user authentication!!
+router.post('/', utils.ensureAuthenticated, function (req, res, next) {
   Review.create(req.body)
   .then(function(createdReview){
     res.status(201).json(createdReview);
@@ -40,12 +34,17 @@ router.post('/', function (req, res, next) {
   .catch(function(err) { next(err); })
 });
 
-router.delete('/:id', function (req, res, next) {
-  //add user authentication!!
-  Review.destroy({where: {id: req.params.id}})
+router.delete('/:id', utils.ensureAuthenticated, function (req, res, next) {
+  var whereClause;
+  if (req.user.isAdmin) {
+    whereClause = {where: {id: req.params.id}}}
+  else {
+    whereClause = {where: {id: req.params.id, userId: req.user.id}}}
+  Review.destroy(whereClause)
   .then(function(response){
-    console.log("##DELETE##", response);
-    res.status(200).json(response);
+    if(+response >= 1)
+    {res.sendStatus(204)}
+    else {res.sendStatus(401)}
   })
   .catch(function(err) { next(err); })
 });
