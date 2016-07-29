@@ -1,8 +1,7 @@
 'use strict';
 var path = require('path');
-var session = require('express-session');
 var passport = require('passport');
-var SequelizeStore = require('connect-session-sequelize')(session.Store);
+var cookieSession = require('cookie-session');
 
 var ENABLED_AUTH_STRATEGIES = [
     'local',
@@ -13,20 +12,13 @@ var ENABLED_AUTH_STRATEGIES = [
 
 module.exports = function (app, db) {
 
-    var dbStore = new SequelizeStore({
-        db: db
-    });
-
     var User = db.model('user');
 
     // First, our session middleware will set/read sessions from the request.
     // Our sessions will get stored in Mongo using the same connection from
     // mongoose. Check out the sessions collection in your MongoCLI.
-    app.use(session({
-        secret: app.getValue('env').SESSION_SECRET,
-        store: dbStore,
-        resave: false,
-        saveUninitialized: false
+    app.use(cookieSession({
+        keys: [app.getValue('env').SESSION_SECRET],
     }));
 
     // Initialize passport and also allow it to read
@@ -70,6 +62,4 @@ module.exports = function (app, db) {
     ENABLED_AUTH_STRATEGIES.forEach(function (strategyName) {
         require(path.join(__dirname, strategyName))(app, db);
     });
-
-    return dbStore.sync();
 };
