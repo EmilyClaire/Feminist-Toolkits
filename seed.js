@@ -22,7 +22,7 @@ var db = require('./server/db');
 var User = db.model('user');
 var Product = db.model('product');
 var Review = db.model('review');
-// var Category = db.category('category');
+var Category = db.model('category');
 var Promise = require('sequelize').Promise;
 
 var seedUsers = function () {
@@ -76,8 +76,14 @@ var seedProducts = function () {
             inventory: 5,
             currentPrice: 600,
             photoUrl: '/images/dreams.jpg'
+        },
+        {
+            name: 'Antidote for toxic masculinity',
+            description: 'Drink this',
+            inventory: 3,
+            currentPrice: 1000,
+            photoUrl: '/images/antidote.jpg'
         }
-
     ];
 
     var creatingProducts = products.map(function (productObj) {
@@ -86,6 +92,28 @@ var seedProducts = function () {
 
     return Promise.all(creatingProducts);
 };
+
+var seedCategories = function () {
+
+    var categories = [
+        {
+            name: 'Defense tools'
+        },
+        {
+            name: 'Femininity'
+        },
+        {
+            name: 'Edibles'
+        }
+    ]
+
+    var creatingCategories = categories.map(function (categoryObj) {
+        return Category.create(categoryObj);
+    });
+
+    return Promise.all(creatingCategories);
+
+}
 
 
 var seedReviews = function () {
@@ -106,6 +134,10 @@ var seedReviews = function () {
         {
             stars: 5,
             content: 'Dream interpretation and lucid dreaming helped me with uncovering the power of my subconscious mind. It teaches me the causes of dreaming, the meanings of common dreams as well as methods of analyzing my own dreams. The mysterious practice of lucid dreaming is supportive of having a realization about the power of my subconscious mind.'
+        },
+        {
+            stars: 5,
+            content: 'This is the best!!!! It works every time and makes all men wear pink and bake fairy cupcakes all day long.'
         }
     ];
 
@@ -116,16 +148,30 @@ var seedReviews = function () {
     return Promise.all(creatingReviews);
 };
 
-
+var productArr,
+    categoryArr,
+    reviewArr;
 
 db.sync({ force: true })
     .then(function () {
-        return Promise.all([/*seedUsers(), */seedProducts(), seedReviews()]);
+        return Promise.all([/*seedUsers(), */seedProducts(), seedCategories(), seedReviews()]);
     })
     .then(function (seedArray) {
-        return Promise.all(seedArray[1].map(function (review, i) {
-            return review.setProduct(seedArray[0][i]);
+        productArr = seedArray[0];
+        categoryArr = seedArray[1];
+        reviewArr = seedArray[2];
+        return Promise.all(reviewArr.map(function (review, i) {
+            return review.setProduct(productArr[i]);
         }));
+    })
+    .then(function () {
+        return Promise.all([
+            productArr[0].addCategories([categoryArr[0], categoryArr[1]]),
+            productArr[1].addCategories([categoryArr[2]]),
+            productArr[2].addCategories([categoryArr[1]]),
+            productArr[3].addCategories([categoryArr[1]]),
+            productArr[4].addCategories([categoryArr[1], categoryArr[2]])
+            ]);
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));

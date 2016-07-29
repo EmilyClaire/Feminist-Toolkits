@@ -6,37 +6,9 @@
     <p>Inventory: {{ product.inventory }}</p>
     <p>Price: {{ product.currentPrice }} USD</p>
     <p ui-sref-active="active"><a ui-sref="reviews({productId: product.id})">Check out reviews for {{ product.name }}</a>
+    <p>Categories: {{  }}</p>
   </p>
     <!-- DIRECTIVE: -->
-  <category-list categories="product.categories"></category-list>
+
 
 </div>
-
-<!--
-<div>
-  <h3>{{ artist.name }}</h3>
-  <ul class="nav nav-tabs">
-    <li ui-sref-active="active"><a ui-sref="artist.albums">ALBUMS</a></li>
-    <li ui-sref-active="active"><a ui-sref="artist.songs">SONGS</a></li>
-  </ul>
-  <ui-view></ui-view>
-</div>
-
-
-<div>
-  <h4>ALBUMS</h4>
-  <div class="row">
-    <div ng-repeat="album in albums" class="col-xs-4">
-      <a class="thumbnail" ui-sref="album({albumId: album.id})">
-        <img ng-src="{{ album.imageUrl }}">
-        <div class="caption">
-          <h5>
-            <span>{{ album.name }}</span>
-          </h5>
-          <small>{{ album.songs.length }} songs</small>
-        </div>
-      </a>
-    </div>
-  </div>
-</div>
- -->
