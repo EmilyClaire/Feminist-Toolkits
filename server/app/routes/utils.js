@@ -8,8 +8,6 @@ var ensureAuthenticated = function (req, res, next) {
 
 var ensureAdmin = function (req, res, next) {
     if (req.user&&req.user.isAdmin) {
-            console.log('passing, cuz')
-            console.log(req.user);
            next();
     } else {
         res.status(401).end();
