@@ -13,9 +13,11 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('ProductController', function ($scope, theProduct, $rootScope) {
+app.controller('ProductController', function ($scope, theProduct, $rootScope, CategoryFactory) {
 
   $scope.product = theProduct;
+  $scope.categories;
+
   $scope.addItem=function(){
     $rootScope.$broadcast('addingItemToCart',theProduct);
   }

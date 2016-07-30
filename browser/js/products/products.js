@@ -11,10 +11,24 @@ app.config(function ($stateProvider) {
         }
     });
 
+    $stateProvider.state('products.category', {
+        url: '/:categoryId',
+        resolve: {
+          allProducts: function (ProductsFactory, $stateParams) {
+            return ProductsFactory.fetchAll($stateParams.categoryId);
+          }
+        }
+    });
+
 });
 
-app.controller('ProductsController', function ($scope, allProducts) {
+app.controller('ProductsController', function ($scope, allProducts, CategoryFactory) {
 
     $scope.products = allProducts;
+
+    CategoryFactory.fetchAll()
+    .then(function (categories) {
+        $scope.categories = categories;
+    });
 
 });
