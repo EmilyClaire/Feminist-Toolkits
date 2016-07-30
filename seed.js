@@ -21,7 +21,8 @@ var chalk = require('chalk');
 var db = require('./server/db');
 var User = db.model('user');
 var Product = db.model('product');
-// var Category = db.category('category');
+var Review = db.model('review');
+var Category = db.model('category');
 var Promise = require('sequelize').Promise;
 
 var seedUsers = function () {
@@ -53,30 +54,36 @@ var seedProducts = function () {
             description: 'An essential tool for any delicate flower',
             inventory: 20,
             currentPrice: 10.50,
-            photoUrl: '/images/robot-unicorn.jpg'
+            photoUrl: '/images/robot-unicorn.png'
         },
         {
             name: 'Baking kit',
-            description: 'Bake amazing things',
-            inventory: 20,
-            currentPrice: 10.50,
-            photoUrl: '/images/robot-unicorn.jpg'
+            description: 'Eat the bears, don\'t feed them',
+            inventory: 190,
+            currentPrice: 15.00,
+            photoUrl: '/images/cupcake-tools.jpg'
         },
         {
             name: 'Skirt',
-            description: 'An essential tool for any delicate flower',
-            inventory: 20,
-            currentPrice: 10.50,
-            photoUrl: '/images/robot-unicorn.jpg'
+            description: 'Don\'t be a bear, be a fairy',
+            inventory: 107,
+            currentPrice: 30.00,
+            photoUrl: '/images/skirt.jpg'
         },
         {
-            name: 'Pastel pants',
-            description: 'An essential tool for any delicate flower',
-            inventory: 30,
-            currentPrice: 20.50,
-            photoUrl: '/images/robot-unicorn.jpg'
+            name: 'Dreams',
+            description: 'If you can dream it, you can do it',
+            inventory: 5,
+            currentPrice: 600,
+            photoUrl: '/images/dreams.jpg'
+        },
+        {
+            name: 'Antidote for toxic masculinity',
+            description: 'Drink this',
+            inventory: 3,
+            currentPrice: 1000,
+            photoUrl: '/images/antidote.jpg'
         }
-
     ];
 
     var creatingProducts = products.map(function (productObj) {
@@ -86,9 +93,85 @@ var seedProducts = function () {
     return Promise.all(creatingProducts);
 };
 
+var seedCategories = function () {
+
+    var categories = [
+        {
+            name: 'Defense tools'
+        },
+        {
+            name: 'Femininity'
+        },
+        {
+            name: 'Edibles'
+        }
+    ]
+
+    var creatingCategories = categories.map(function (categoryObj) {
+        return Category.create(categoryObj);
+    });
+
+    return Promise.all(creatingCategories);
+
+}
+
+
+var seedReviews = function () {
+
+    var reviews = [
+        {
+            stars: 5,
+            content: 'The size is decent, but the garish colors takes away some of their cuteness. I considered spray painting them all gold, or better yet, two of each a rainbow color since we are going for "rainbows and unicorns."'
+        },
+        {
+            stars: 4,
+            content: 'Cute little unicorn figurines. We "hid" them in plain view around the house and everyone had fun finding them (on door frames, window sills, etc). They also made for cute table decorations. Every guest took one home with them, and at this price it was no trouble making sure we had more than enough.'
+        },
+        {
+            stars: 3,
+            content: 'I ordered these as cupcake toppers. They were perfect because they were a solid plastic and not that fuzzy plastic that is on some of these figurines. They were the right size for a standard size cupcake and the accent paint was not a problem at all.'
+        },
+        {
+            stars: 5,
+            content: 'Dream interpretation and lucid dreaming helped me with uncovering the power of my subconscious mind. It teaches me the causes of dreaming, the meanings of common dreams as well as methods of analyzing my own dreams. The mysterious practice of lucid dreaming is supportive of having a realization about the power of my subconscious mind.'
+        },
+        {
+            stars: 5,
+            content: 'This is the best!!!! It works every time and makes all men wear pink and bake fairy cupcakes all day long.'
+        }
+    ];
+
+    var creatingReviews = reviews.map(function (reviewObj) {
+        return Review.create(reviewObj);
+    });
+
+    return Promise.all(creatingReviews);
+};
+
+var productArr,
+    categoryArr,
+    reviewArr;
+
 db.sync({ force: true })
     .then(function () {
-        return Promise.all([/*seedUsers(), */seedProducts()]);
+        return Promise.all([/*seedUsers(), */seedProducts(), seedCategories(), seedReviews()]);
+    })
+    .then(function (seedArray) {
+        productArr = seedArray[0];
+        categoryArr = seedArray[1];
+        reviewArr = seedArray[2];
+        return Promise.all(reviewArr.map(function (review, i) {
+            return review.setProduct(productArr[i]);
+        }));
+    })
+    .then(function () {
+        return Promise.all([
+            productArr[0].addCategories([categoryArr[0], categoryArr[1]]),
+            productArr[1].addCategories([categoryArr[2]]),
+            productArr[2].addCategories([categoryArr[1]]),
+            productArr[3].addCategories([categoryArr[1]]),
+            productArr[4].addCategories([categoryArr[1], categoryArr[2]])
+            ]);
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));
