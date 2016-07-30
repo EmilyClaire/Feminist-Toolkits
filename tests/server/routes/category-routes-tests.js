@@ -4,11 +4,40 @@ var db = require('../../../server/db');
 
 var supertest = require('supertest');
 
-//var authCheck = require()
+var Promise = require('bluebird');
 
 describe('Categories Route', function () {
 
-    var app, User, Category;
+    var app, User, Category, catArr;
+
+    catArr = new Array(3);
+
+    var usefulArr = function(arr){
+        var newArr = [];
+        arr = arr.map(function(value){
+        value = {
+          id: value.id,
+          name: value.name
+        };
+
+        newArr[value.id - 1] = value;
+
+        return value;
+      })
+
+      return newArr;
+    }
+
+    var getAll = function(Cat){
+      var all = [];
+
+      return Cat.findAll()
+      .then(function(categories){
+        all = usefulArr(categories);
+        return all;
+      })
+
+    };
 
     beforeEach('Sync DB', function () {
         return db.sync({ force: true });
@@ -21,35 +50,20 @@ describe('Categories Route', function () {
     });
 
   beforeEach('Seed category database', function (){
-    Category.create({name: 'banana'})
-    .then(function(){
-      Category.create({name: 'apple'});
-    })
-    .then(function(){
-      Category.create({name: 'pie'});
-    })
+    Promise.all([Category.create({name: 'banana'}), Category.create({name: 'apple'}),
+                Category.create({name: 'pie'})])
+    .then(function(promiseArr){
+      catArr = usefulArr(promiseArr);
+    });
   });
 
   describe('Unauthenticated user request', function () {
 
-    var guestAgent, checkCategories;
+    var guestAgent;
 
     beforeEach('Create guest agent', function () {
       guestAgent = supertest.agent(app);
 
-      checkCategories = function (done){
-         guestAgent.get('/api/categories')
-        .expect(200)
-        .end(function(err, res){
-          if(err) return done(err);
-          expect(res.body).to.be.an('array');
-          expect(res.body).to.have.lengthOf(3);
-          expect(res.body[0]).to.eql('banana');
-          expect(res.body[1]).to.eql('apple');
-          expect(res.body[2]).to.eql('pie');
-          done();
-        })
-      };
     });
 
 
@@ -59,44 +73,74 @@ describe('Categories Route', function () {
         .expect(200)
         .end(function(err, res){
           if(err) return done(err);
-          expect(res.body).to.be.an('array');
-          expect(res.body).to.have.lengthOf(3);
-          expect(res.body[0]).to.eql('banana');
-          expect(res.body[1]).to.eql('apple');
-          expect(res.body[2]).to.eql('pie');
+
+          var arr = usefulArr(res.body);
+
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr).to.contain(catArr[0]);
+          expect(arr).to.contain(catArr[1]);
+          expect(arr).to.contain(catArr[2]);
           done();
-        });
+      });
     });
 
-    it('Try to add a category and get a 403 error', function (done){
+    it('Try to add a category and get a 401 error', function (done){
       guestAgent.post('/api/categories').send({name: 'cheese'})
-      .expect(403)
+      .expect(401)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.be.empty();
-        checkCategories();
+        expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
 
-  it('Try to edit a category and get a 403 error', function (done){
+  it('Try to edit a category and get a 401 error', function (done){
       guestAgent.put('/api/categories/1').send({name: 'cheese'})
-      .expect(403)
+      .expect(401)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.be.empty();
-        checkCategories();
+        expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
 
-  it('Try to delete a category and get a 403 error', function (done){
+  it('Try to delete a category and get a 401 error', function (done){
       guestAgent.delete('/api/categories/1')
-      .expect(403)
+      .expect(401)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.be.empty();
-        checkCategories();
+        expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
@@ -104,27 +148,13 @@ describe('Categories Route', function () {
 
   describe('Authenticated request', function () {
 
-    var loggedInAgent, checkCategories;
+    var loggedInAgent;
 
     var userInfo= {
       email: 'joe@gmail.com',
       password: 'shoopdawoop',
       name: 'Joe'
     };
-
-    checkCategories = function (done){
-       loggedInAgent.get('/api/categories')
-      .expect(200)
-      .end(function(err, res){
-        if(err) return done(err);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.have.lengthOf(3);
-        expect(res.body[0]).to.eql('banana');
-        expect(res.body[1]).to.eql('apple');
-        expect(res.body[2]).to.eql('pie');
-        done();
-      });
-  };
 
     beforeEach('Create a user', function (done) {
       return User.create(userInfo).then(function () {
@@ -140,54 +170,83 @@ describe('Categories Route', function () {
     it('should get with 200 response and with an array as the body containing'
        + ' banana, apple, pie' , function (done) {
       loggedInAgent.get('/api/categories')
-      .expect(200)
-      .end(function (err, res) {
-        if (err) return done(err);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.be.lengthOf(3);
-        expect(res.body[0]).to.eql('banana');
-        expect(res.body[1]).to.eql('apple');
-        expect(res.body[2]).to.eql('pie');
-        done();
-      });
+        .expect(200)
+        .end(function(err, res){
+          if(err) return done(err);
+
+          var arr = usefulArr(res.body);
+
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr).to.contain(catArr[0]);
+          expect(arr).to.contain(catArr[1]);
+          expect(arr).to.contain(catArr[2]);
+          done();
+        });
     });
 
-    it('Try to add a category and get a 403 error', function (done){
+    it('Try to add a category and get a 401 error', function (done){
       loggedInAgent.post('/api/categories').send({name: 'cheese'})
-      .expect(403)
+      .expect(401)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.be.empty();
-        checkCategories();
+        expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
 
-  it('Try to edit a category and get a 403 error', function (done){
+  it('Try to edit a category and get a 401 error', function (done){
       loggedInAgent.put('/api/categories/1').send({name: 'cheese'})
-      .expect(403)
+      .expect(401)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.be.empty();
-        checkCategories();
+        expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
 
-  it('Try to delete a category and get a 403 error', function (done){
+  it('Try to delete a category and get a 401 error', function (done){
       loggedInAgent.delete('/api/categories/1')
-      .expect(403)
+      .expect(401)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.be.empty();
-        checkCategories();
+        expect(res.body).to.be.empty;
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
   });
 
   describe('Admin request', function(){
-    var adminAgent, getCategories;
+    var adminAgent;
 
       var admin = {
       email: 'emily@e.com',
@@ -196,14 +255,6 @@ describe('Categories Route', function () {
       name: 'Emily'
     };
 
-    getCategories = function(done){
-      return adminAgent.get('/api/categories')
-      .end(function(err, res){
-        if(err) return done(err);
-
-        return done(res.body);
-      });
-    }
     beforeEach('Create an admin', function (done){
         return User.create(admin).then(function () {
           done()
@@ -219,46 +270,87 @@ describe('Categories Route', function () {
        + ' banana, apple, pie' , function (done) {
       adminAgent.get('/api/categories')
       .expect(200)
-      .end(function (err, res) {
-        if (err) return done(err);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.be.lengthOf(3);
-        expect(res.body[0]).to.eql('banana');
-        expect(res.body[1]).to.eql('apple');
-        expect(res.body[2]).to.eql('pie');
-        done();
-      });
+      .end(function(err, res){
+        if(err) return done(err);
+
+          var arr = usefulArr(res.body);
+
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr).to.contain(catArr[0]);
+          expect(arr).to.contain(catArr[1]);
+          expect(arr).to.contain(catArr[2]);
+          done();
+        });
     });
 
     it('Successfully Add a category', function (done){
-      adminAgent.post('/api/categories').send({name: 'cheese'})
+      adminAgent.post('/api/categories').send({name: 'pizza'})
       .expect(201)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.equal({name: 'cheese'});
-        expect(getCategories()).to.equal(['banana', 'apple', 'pie', 'cheese']);
+        expect(res.body.name).to.equal('pizza');
+        catArr.push({id: 4, name: 'pizza'});
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(4);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+          expect(arr[3]).to.eql(catArr[3]);
+        })
+       .catch(err);
         done();
       });
     });
 
   it('edit a category and get a 200 message', function (done){
       adminAgent.put('/api/categories/1').send({name: 'cheese'})
-      .expect(200)
+      .expect(201)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.be.eql({name: 'cheese'});
-        expect(getCategories()).to.be.eql(['banana', 'cheese', 'pie', 'cheese'])
+        expect(res.body.name).to.be.empty;
+        catArr[0] = {id: 1, name: 'cheese'};
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+          })
+        .catch(err);
         done();
-      });
+      })
     });
 
   it('delete a category and get a 200 message', function (done){
-      adminAgent.delete('/api/categories/1')
-      .expect(200)
+      adminAgent.delete('/api/categories/3')
+      .expect(204)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body).to.be.eql({name: 'cheese'});
-        expect(getCategories()).to.be.eql(['banana', 'pie', 'cheese'])
+        expect(res.body.name).to.be.empty;
+        Category.findOne({
+          where: {
+            name: 'pizza'
+          }
+        })
+        .then(function(result){
+          expect(result).to.eql(null);
+        })
+        .then(function(){
+          getAll(Category)
+          .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(2);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          })
+        })
+        .catch(err);
         done();
       });
     });
