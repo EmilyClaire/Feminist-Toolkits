@@ -4,7 +4,8 @@ var expect = require('chai').expect;
 var Category = require('../../../server/db/models/category');
 var db = require('../../../server/db/_db');
 
-describe('Category', function () {
+
+describe('Category Model', function () {
 
   /**
    * First we clear the database and recreate the tables before beginning each run
@@ -32,8 +33,21 @@ describe('Category', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('notNull');
       });
+  });
 
-
+  it('name must be unique', function() {
+    return Category.create({
+      name: 'one'
+    }).then(function (){
+      var category = Category.build({
+        name: 'one'
+      });
+      return category.save()
+      .catch(function (error){
+        expect(error).to.be.an.instanceOf(Error);
+        expect(error.message).to.contain('Validation');
+      })
+    });
   });
 
   it('name cannot be empty', function () {
@@ -47,6 +61,5 @@ describe('Category', function () {
         expect(result).to.be.an.instanceOf(Error);
         expect(result.message).to.contain('Validation error');
       });
-
   });
 });
