@@ -25,7 +25,7 @@ router.delete('/:id', auth.ensureAdmin, function(req, res, next){
       id: req.params.id
     }
   })
-  .then(function(result){
+  .then(function(){
     res.sendStatus(204);
   })
   .catch(next);
