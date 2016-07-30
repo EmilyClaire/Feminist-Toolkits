@@ -8,9 +8,36 @@ var Promise = require('bluebird');
 
 describe('Categories Route', function () {
 
-    var app, User, Category, cat1, cat2, cat3, catArr;
+    var app, User, Category, catArr;
 
-    catArr = new Array(4);
+    catArr = new Array(3);
+
+    var usefulArr = function(arr){
+        var newArr = [];
+        arr = arr.map(function(value){
+        value = {
+          id: value.id,
+          name: value.name
+        };
+
+        newArr[value.id - 1] = value;
+
+        return value;
+      })
+
+      return newArr;
+    }
+
+    var getAll = function(Cat){
+      var all = [];
+
+      return Cat.findAll()
+      .then(function(categories){
+        all = usefulArr(categories);
+        return all;
+      })
+
+    };
 
     beforeEach('Sync DB', function () {
         return db.sync({ force: true });
@@ -26,22 +53,7 @@ describe('Categories Route', function () {
     Promise.all([Category.create({name: 'banana'}), Category.create({name: 'apple'}),
                 Category.create({name: 'pie'})])
     .then(function(promiseArr){
-      cat1 = promiseArr[0];
-      cat2 = promiseArr[1];
-      cat3 = promiseArr[2];
-
-      catArr[cat1.id] = cat1;
-      catArr[cat2.id] = cat2;
-      catArr[cat3.id] = cat3;
-
-      catArr = catArr.map(function(value){
-        value = {
-          id: value.id,
-          name: value.name
-        };
-
-        return value;
-      })
+      catArr = usefulArr(promiseArr);
     });
   });
 
@@ -62,20 +74,14 @@ describe('Categories Route', function () {
         .end(function(err, res){
           if(err) return done(err);
 
-        var arr = res.body.map(function(value){
-          value = {
-            id: value.id,
-            name: value.name
-          };
-          return value;
-        });
+          var arr = usefulArr(res.body);
 
-        expect(arr).to.be.an('array');
-        expect(arr).to.have.lengthOf(3);
-        expect(arr).to.contain(catArr[1]);
-        expect(arr).to.contain(catArr[2]);
-        expect(arr).to.contain(catArr[3]);
-        done();
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr).to.contain(catArr[0]);
+          expect(arr).to.contain(catArr[1]);
+          expect(arr).to.contain(catArr[2]);
+          done();
       });
     });
 
@@ -85,6 +91,16 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
@@ -95,6 +111,16 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
@@ -105,6 +131,16 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
@@ -138,21 +174,15 @@ describe('Categories Route', function () {
         .end(function(err, res){
           if(err) return done(err);
 
-        var arr = res.body.map(function(value){
-          value = {
-            id: value.id,
-            name: value.name
-          };
-          return value;
-        });
+          var arr = usefulArr(res.body);
 
-        expect(arr).to.be.an('array');
-        expect(arr).to.have.lengthOf(3);
-        expect(arr).to.contain(catArr[1]);
-        expect(arr).to.contain(catArr[2]);
-        expect(arr).to.contain(catArr[3]);
-        done();
-      });
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr).to.contain(catArr[0]);
+          expect(arr).to.contain(catArr[1]);
+          expect(arr).to.contain(catArr[2]);
+          done();
+        });
     });
 
     it('Try to add a category and get a 401 error', function (done){
@@ -161,6 +191,16 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
@@ -171,6 +211,16 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body).to.be.empty;
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
@@ -181,6 +231,15 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body).to.be.empty;
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+        })
+        .catch(err);
         done();
       });
     });
@@ -214,22 +273,16 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
 
-      var arr = res.body.map(function(value){
-        value = {
-          id: value.id,
-          name: value.name
-        };
-        return value;
-      });
+          var arr = usefulArr(res.body);
 
-      expect(arr).to.be.an('array');
-      expect(arr).to.have.lengthOf(3);
-      expect(arr).to.contain(catArr[1]);
-      expect(arr).to.contain(catArr[2]);
-      expect(arr).to.contain(catArr[3]);
-      done();
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr).to.contain(catArr[0]);
+          expect(arr).to.contain(catArr[1]);
+          expect(arr).to.contain(catArr[2]);
+          done();
+        });
     });
-  });
 
     it('Successfully Add a category', function (done){
       adminAgent.post('/api/categories').send({name: 'pizza'})
@@ -237,15 +290,18 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body.name).to.equal('pizza');
-        Category.findOne({
-          where: {
-            name: 'pizza'
-          }
+        catArr.push({id: 4, name: 'pizza'});
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(4);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+          expect(arr[3]).to.eql(catArr[3]);
         })
-        .then(function(result){
-          expect(result.name).to.eql('pizza');
-        })
-        .catch(err);
+       .catch(err);
         done();
       });
     });
@@ -256,26 +312,27 @@ describe('Categories Route', function () {
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body.name).to.be.empty;
-        Category.findOne({
-          where: {
-            id: 1
-          }
-        })
-        .then(function(result){
-          expect(result.name).to.eql('cheese');
-        })
+        catArr[0] = {id: 1, name: 'cheese'};
+
+        getAll(Category)
+        .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(3);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          expect(arr[2]).to.eql(catArr[2]);
+          })
         .catch(err);
         done();
-      });
+      })
     });
 
   it('delete a category and get a 200 message', function (done){
-      adminAgent.delete('/api/categories/1')
+      adminAgent.delete('/api/categories/3')
       .expect(204)
       .end(function(err, res){
         if(err) return done(err);
         expect(res.body.name).to.be.empty;
-
         Category.findOne({
           where: {
             name: 'pizza'
@@ -283,8 +340,17 @@ describe('Categories Route', function () {
         })
         .then(function(result){
           expect(result).to.eql(null);
-        }).catch(err);
-
+        })
+        .then(function(){
+          getAll(Category)
+          .then(function(arr){
+          expect(arr).to.be.an('array');
+          expect(arr).to.have.lengthOf(2);
+          expect(arr[0]).to.eql(catArr[0]);
+          expect(arr[1]).to.eql(catArr[1]);
+          })
+        })
+        .catch(err);
         done();
       });
     });
