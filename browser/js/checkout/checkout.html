@@ -1,0 +1,43 @@
+<div class="well">
+  <form class="form-horizontal" name='checkoutForm'>
+    <fieldset>
+      <legend><h2>Your Order</h2></legend>
+		<h4>Items ({{items.number}})</h4>
+		<table class='table'>
+			<tr ng-repeat='item in items'>
+        <td>{{item.quantity}}</td>
+        <td><b>{{item.name}}</b></td>
+        <td>${{item.currentPrice*item.quantity}}</td>
+      </tr>
+		</table>
+	<h4>Total: ${{items.total}}</h4>  
+      <legend><h2>Your Information</h2></legend>
+    
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Name</label>
+        <div class="col-xs-10">
+          <input name='clientName' class="form-control" type="text" ng-model='client.name' required>
+        </div>
+        <label class="col-xs-2 control-label">Email</label>
+        <div class="col-xs-10">
+          <input name='clientEmail' class="form-control" type="email"  ng-model='client.email' required>
+        </div>
+        <label class="col-xs-2 control-label">Shipping Address</label>
+        <div class="col-xs-10">
+          <textarea rows="3" name='clientAddress' class="form-control" ng-model='client.address'required></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-10 col-xs-offset-2">
+          <div class="alert alert-warning" ng-show='checkoutForm.clientName.$error.required&&checkoutForm.clientName.$dirty'>Please enter a name</div>
+          <div class="alert alert-warning" ng-show='checkoutForm.clientEmail.$error.required&&checkoutForm.clientEmail.$dirty'>Please enter an email</div>
+          <div class="alert alert-warning" ng-show='checkoutForm.clientAddress.$error.required&&checkoutForm.clientAddress.$dirty'>Please enter a shipping address</div>
+         
+          <button type="submit" class="btn btn-success" ng-click='submitOrder(client.address,client.name,client.email)' ng-disabled='checkoutForm.$error.required'>Submit Order</button>
+
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+</div>
