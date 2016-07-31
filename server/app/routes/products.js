@@ -1,28 +1,69 @@
 'use strict';
+
 var router = require('express').Router();
-var bodyParser = require('body-parser');
 var Product = require('../../db/models/product');
 var Review = require('../../db/models/review');
+var Category = require('../../db/models/category');
 var ensureAdmin = require('./utils').ensureAdmin;
+var Promise = require('sequelize').Promise;
 
 router.get('/', function (req, res, next) {
-    Product.findAll()
-    .then(function (products) {
-        res.json(products);
-    })
-    .catch(next);
+    if (req.query.categoryId) {
+        Product.findAll({
+            include: [{
+                model: Category,
+                required: true,
+                through: {
+                    where: {
+                        categoryId: req.query.categoryId
+                    }
+                }
+
+            }]
+        })
+        .then(function (products) {
+            res.json(products);
+        })
+        .catch(next);
+    } else {
+        Product.findAll()
+        .then(function (products) {
+            res.json(products);
+        })
+        .catch(next);
+    }
 });
 
 router.get('/:id', function (req, res, next) {
-    Product.findById(req.params.id)
-    .then(function (product) {
-      if (product) {
-        res.json(product);
-      } else {
-        var err = new Error('Product not found');
-        err.status = 404;
-        next(err);
-      }
+    Promise.all([
+        Product.findById(req.params.id),
+        Category.findAll({
+            include: [{
+                model: Product,
+                required: true,
+                through: {
+                    where: {
+                        productId: req.params.id
+                    }
+                }
+
+            }]
+        })
+    ])
+    .then(function (arrayOfResolves) {
+        var product = arrayOfResolves[0];
+        var categories = arrayOfResolves[1];
+        if (product) {
+            var productObj = {
+                product: product,
+                categories: categories
+            }
+            res.json(productObj);
+        } else {
+            var err = new Error('Product not found');
+            err.status = 404;
+            next(err);
+        }
     })
     .catch(next);
 });

@@ -10,7 +10,7 @@ var Category = require('./models/category');
 
 
 //Since we required in the models, we can now make changes to them that will persist in memory - such as setting up relations!
-Category.belongsToMany(Product, { through: 'categoryProducts' }); 
+Category.belongsToMany(Product, { through: 'categoryProducts' });
 Product.belongsToMany(Category, { through: 'categoryProducts' });
 
 Review.belongsTo(Product);
@@ -25,5 +25,5 @@ User.hasMany(Order);
 
 Order.belongsToMany(Product, {through: OrderProducts});
 
-module.exports=db; 
+module.exports=db;
 
