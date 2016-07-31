@@ -19,7 +19,7 @@ app.controller('ProductController', function ($scope, theProduct, $rootScope) {
   $scope.categories = theProduct.categories;
 
   $scope.addItem=function(){
-    $rootScope.$broadcast('addingItemToCart',theProduct);
+    $rootScope.$broadcast('addingItemToCart',theProduct.product);
   }
 
 });
