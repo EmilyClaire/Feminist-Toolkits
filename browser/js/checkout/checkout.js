@@ -20,5 +20,6 @@ app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,Or
 	});
 	$scope.submitOrder=function(shippingAddress,name,email){
 		console.log(shippingAddress,name,email);
+		/*NEEDS TO BE CONNECTED WITH ROUTES*/
 	}
 });
