@@ -1,0 +1,9 @@
+<div>
+	<h1>My Cart</h1>
+	<h2>Items ({{items.length}})</h2>
+	<ul>
+		<li ng-repeat='item in items'><h4>{{item.name}}</h4>${{item.currentPrice*item.quantity}}<br> <button ng-click="removeFromCart(item,'one')">-</button> {{item.quantity}} <button ng-click="addToCart(item)">+</button><br><button ng-show="item.quantity>1" ng-click="removeFromCart(item,'all')">remove all</button></li>
+	</ul>
+	<h4>Total: ${{total}}</h4>
+	<button ng-hide="cartIsEmpty()" ui-sref="checkout">Proceed to Checkout</button>
+</div>
