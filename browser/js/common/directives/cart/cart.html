@@ -24,7 +24,7 @@
 					<p><b>Quantity: </b><button class='btn btn-default btn-xs' ng-click="removeFromCart(item,'one')">-</button> {{item.quantity}} <button class='btn btn-default btn-xs' ng-click="addToCart(item)">+</button><br>
 					<b>Subtotal: </b>${{item.currentPrice*item.quantity}}<br></p>
 				</div>
-			<h4 ng-hide='cartIsEmpty()'>Total: ${{total}}</h4>
+			<h4 ng-hide='cartIsEmpty()'>Total: ${{items.total}}</h4>
 			<button ng-hide="cartIsEmpty()" class="btn btn-success" ng-click='toggleCheckout()'>Proceed to Checkout</button>
 			<div ng-show="cartIsEmpty()"><h5>Your cart is empty!</h5><p><i>{{scoldingMessage}}</i></p><h5>Get <a ui-sref='products'>shopping</a>!</h5></div>
 		</div>
