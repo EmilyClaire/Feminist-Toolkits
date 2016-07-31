@@ -13,7 +13,7 @@ app.factory('ProductsFactory', function ($http) {
     var queryParams = {};
 
     if (categoryId) {
-      queryParams.category = categoryId;
+      queryParams.categoryId = categoryId;
     }
 
     return $http.get('/api/products', {

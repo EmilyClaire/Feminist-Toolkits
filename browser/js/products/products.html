@@ -1,11 +1,10 @@
 <section class="products">
     <p>
         <label>Choose a category
-            <select name="category" ng-options="category.name for category in categories" ng-change="selectedCategory" required></select>
+            <select name="category" ng-options="category.name for category in categories" ng-model="selectedCategory" ng-change="onSelectCategory()" required></select>
         </label>
     </p>
     <div ng-repeat="product in products">
       <a ui-sref="product({productId: product.id})">{{ product.name }}</a>
     </div>
-
 </section>
