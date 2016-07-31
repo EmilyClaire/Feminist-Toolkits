@@ -7,7 +7,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,OrdersFactory) {
+app.controller('CheckoutController', function ($scope,$rootScope,$stateParams) {
 	$scope.items=JSON.parse($stateParams.items);
 	$scope.items.number=$stateParams.number;
 	$scope.items.total=$stateParams.total;

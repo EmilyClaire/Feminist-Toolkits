@@ -55,6 +55,7 @@ app.directive('cart', function ($state) {
             }
             scope.toggleCheckout=function(){
                 var serialized=JSON.stringify(scope.items);
+                console.log(scope.items);
                 $state.go('checkout',{items: serialized,number:scope.items.number,total:scope.items.total});
                 scope.checkingOut=true;
             }
