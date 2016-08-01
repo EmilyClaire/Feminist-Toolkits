@@ -18,8 +18,10 @@ app.directive('addReview', function ($state, AuthService, $stateParams, $http) {
             scope.selectedStars = 5;
 
             scope.addReview = function(stars, review){
-                $http.post("/reviews").send({productId: $stateParams.productId,
+                $http.post("api/reviews/", {productId: $stateParams.productId,
                     stars: stars, content: review})
+
+                $state.go('reviews', {productId: $stateParams.productId});
             };
         }
     }

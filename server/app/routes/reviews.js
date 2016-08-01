@@ -5,11 +5,6 @@ var db = require('../../db');
 var Review = db.model('review');
 var utils = require('./utils');
 
-// var _ = require('lodash');
-
-//insert as second arg of router.get before cb, if needed:
-// ensureAuthenticated()
-
 router.get('/product/:prodId', function (req, res, next) {
   Review.findAll({where: {productId: req.params.prodId}})
   .then(function(reviewArr){
@@ -27,9 +22,14 @@ router.get('/user/:userId', function (req, res, next) {
 });
 
 router.post('/', utils.ensureAuthenticated, function (req, res, next) {
+  var productId = req.body.productId;
+
   Review.create(req.body)
   .then(function(createdReview){
-    res.status(201).json(createdReview);
+    return createdReview.setProduct(productId)
+  }).then(function(obj){
+        var result = obj.dataValues;
+        res.status(201).json(result);
   })
   .catch(function(err) { next(err); })
 });
