@@ -8,30 +8,11 @@ var ensureAdmin = require('./utils').ensureAdmin;
 var Promise = require('sequelize').Promise;
 
 router.get('/', function (req, res, next) {
-    if (req.query.categoryId) {
-        Product.findAll({
-            include: [{
-                model: Category,
-                required: true,
-                through: {
-                    where: {
-                        categoryId: req.query.categoryId
-                    }
-                }
-
-            }]
-        })
-        .then(function (products) {
-            res.json(products);
-        })
-        .catch(next);
-    } else {
-        Product.findAll()
-        .then(function (products) {
-            res.json(products);
-        })
-        .catch(next);
-    }
+    Product.findAll()
+    .then(function (products) {
+        res.json(products);
+    })
+    .catch(next);
 });
 
 router.get('/:id', function (req, res, next) {
