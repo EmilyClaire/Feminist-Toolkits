@@ -23,15 +23,34 @@ router.get('/user/:userId', function (req, res, next) {
 
 router.post('/', utils.ensureAuthenticated, function (req, res, next) {
   var productId = req.body.productId;
+  var userId = req.body.userId;
+  var review;
 
   Review.create(req.body)
   .then(function(createdReview){
-    return createdReview.setProduct(productId)
-  }).then(function(obj){
-        var result = obj.dataValues;
-        res.status(201).json(result);
+      review = createdReview;
+    return review.setUser(userId);
+  }).then(function(resultObj){
+    if(resultObj){
+      return review.setProduct(productId)
+    }
+    else{
+        var err = new Error();
+        err.message = "OMG, SOMETHING HAS GONE WRONG. check reviews.js in routes line 38"
+        next(err);
+    }
   })
-  .catch(function(err) { next(err); })
+  .then(function(obj){
+        if(obj){
+        res.status(201).json(review);
+      }
+      else{
+        var err = new Error();
+        err.message = "OMG, SOMETHING HAS GONE WRONG. check reviews.js in routes line 43"
+        next(err);
+      }
+    })
+  .catch(next)
 });
 
 router.delete('/:id', utils.ensureAuthenticated, function (req, res, next) {

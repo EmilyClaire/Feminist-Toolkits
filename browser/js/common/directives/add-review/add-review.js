@@ -1,4 +1,4 @@
-app.directive('addReview', function ($state, AuthService, $stateParams, $http) {
+app.directive('addReview', function ($state, AuthService, $stateParams, $http, Session) {
     return {
         restrict: 'E',
         scope: {},
@@ -19,7 +19,7 @@ app.directive('addReview', function ($state, AuthService, $stateParams, $http) {
 
             scope.addReview = function(stars, review){
                 $http.post("api/reviews/", {productId: $stateParams.productId,
-                    stars: stars, content: review})
+                    stars: stars, content: review, userId: Session.user.id})
 
                 $state.go('reviews', {productId: $stateParams.productId});
             };
