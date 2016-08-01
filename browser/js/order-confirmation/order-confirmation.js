@@ -7,6 +7,5 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('ConfirmationController', function ($scope) {
-	console.log('WELL WHOOPDIEDOO')
-});
+// app.controller('ConfirmationController', function ($scope) {
+// });
