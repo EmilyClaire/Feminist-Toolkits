@@ -2,6 +2,10 @@
 var router = require('express').Router();
 var Order=require('../../db/models/order.js');
 var User=require('../../db/models/user.js');
+var Product=require('../../db/models/product.js');
+var OrderProduct=require('../../db/models/order-products.js');
+
+
 var Promise=require('bluebird');
 
 var utils=require('./utils');
@@ -35,25 +39,31 @@ router.get('/:id',ensureAuthenticated,function (req, res,next) {
 });
 
 router.post('/',function (req, res,next) {
-    //req.body should contain shippingAddress, name, email
+    //req.body should contain shippingAddress, name, email, items
     var userPromise;
     var orderPromise;
-    if(!req.isAuthenticated()){
-        userPromise=User.findOrCreate({
-            where: 
-                {email: req.body.email},  
-            defaults: 
-                {name: req.body.name, password: generateRandomPassword()}
-            })
-    }
-    else{
-        userPromise=req.user;
-    }
+    var orderId;
+    var ids=req.body.products.map(function(product){return product.id})
+    userPromise=User.findOrCreate({
+        where: 
+            {email: req.body.email},  
+        defaults: 
+            {name: req.body.name, password: generateRandomPassword()}
+    })
     orderPromise=Order.create({shippingAddress:req.body.shippingAddress});
     Promise.all([userPromise,orderPromise])
     .spread(function(findCreateResult,order){
-        var user=findCreateResult[0];
+        if(!req.isAuthenticated()){
+            var user=findCreateResult[0];
+        } else{ user=req.user}
+        orderId=order.id;
         return order.setUser(user);
+    })
+    .then(function(order){
+        return order.setProducts(ids)
+    })
+    .then(function(order){
+        return Order.findById(orderId);
     })
     .then(function(order){
         res.status(201).send(order); 
@@ -68,12 +78,14 @@ router.delete('/:id',function(req,res,next){
         if((req.user&&req.user.isAdmin)||ensureAppropriateUser(req,order)){
             return Order.destroy({where: {id: req.params.id}})
         }
+    })
+    .then(function(order){
+        if(order){
+            res.sendStatus(204); 
+        }
         else{
             res.sendStatus(401);
         }
-    })
-    .then(function(){
-        res.sendStatus(204); 
     })
     .catch(next);
 });
