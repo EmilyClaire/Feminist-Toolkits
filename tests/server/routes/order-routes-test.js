@@ -192,6 +192,7 @@ describe('Orders Routes', function () {
         .expect(201)
         .end(function(err, res){
           if(err) return done(err);
+          console.log(res.body);
           expect(res.body.shippingAddress).to.eql('my house');
           expect(res.body.products).to.be.an('array');
           expect(res.body.products).to.have.lengthOf(2);
