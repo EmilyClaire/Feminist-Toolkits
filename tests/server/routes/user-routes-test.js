@@ -97,11 +97,11 @@ describe('Users Route', function () {
       .end(done);
     });
 
-    it('updates user information', function(done){
-      loggedInAgent.put('/api/users/1').send({name: "Joey"})
-      .expect(201)
-      .end(done);
-    })
+    // it('updates user information', function(done){
+    //   loggedInAgent.put('/api/users/1').send({name: "Joey"})
+    //   .expect(201)
+    //   .end(done);
+    // })
 
   });
 

@@ -24,6 +24,10 @@ router.get('/:userId', function (req, res, next) {
   }
 });
 
+router.get('/:userId/orderHistory', function(req,res,next){
+  //get all orders for user
+});
+
 router.post('/', function (req, res, next) {
   User.findOne({where: {email: req.body.email}})
   .then(function (user) {
