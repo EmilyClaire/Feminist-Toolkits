@@ -6,7 +6,6 @@ var utils = require('./utils')
 router.get('/', utils.ensureAdmin, function (req, res, next) {
   User.findAll()
   .then(function (userArr) {
-    console.log('here be users:', userArr || 'nope')
     res.send(userArr)
   })
   .catch(next);
@@ -21,21 +20,23 @@ router.get('/:userId', function (req, res, next) {
     .catch(next);
   }
   else{
-    res.send(401);
+    res.sendStatus(401);
   }
 });
 
 router.post('/', function (req, res, next) {
-  User.findOrCreate({where: {email: req.body.email}})
-  .then(function (userCreated) {
-    if (!userCreated[1]) {
+  User.findOne({where: {email: req.body.email}})
+  .then(function (user) {
+    if (user) {
       res.status(409).send("There is already an account with this email");
+      return;
     }
-    else {
-      res.status(201).send(userCreated[0]);
-    }
+    else
+      User.create(req.body)
+      .then(function(user){
+        res.status(201).send(user);
+      })
   })
-  .catch(next);
 });
 
 router.put('/:userId', function (req, res, next) {
@@ -45,7 +46,6 @@ router.put('/:userId', function (req, res, next) {
       return userInstance.update(req.body)
     })
     .then(function (userUpdated) {
-      console.log(userUpdated)
       res.status(201).send(userUpdated)
     })
     .catch(next);

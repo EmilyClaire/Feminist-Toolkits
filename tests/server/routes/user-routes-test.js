@@ -7,8 +7,8 @@ describe('Users Route', function () {
   var app, User;
 
   var userInfo = {
-    email: 'joe@gmail.com',
-    password: 'shoopdawoop', name: 'User Guy'
+    email: 'testGuy@gmail.com',
+    password: 'testuser', name: 'Testuser Guy'
   };
 
   beforeEach('Sync DB', function () {
@@ -28,29 +28,9 @@ describe('Users Route', function () {
   });
 
   describe('for admin', function () {
-    // var loggedInAdmin;
-    // var adminInfo = { email: 'emily@e.com',
-    //   password: 'lucas',
-    //   isAdmin: true,
-    //   name: 'Emily' }
+    var loggedInAdmin;
 
-    // beforeEach('Create admin user', function (done){
-    //   return User.create(adminInfo)
-    //   .then(function(){
-    //     done(); })
-    //   .catch(done);
-
-    // });
-
-    // beforeEach('logs in admin', function(done){
-    //   loggedInAdmin = supertest.agent(app);
-    //   return loggedInAdmin.post('/login')
-    //   .send(adminInfo).end(done)
-    //   done();
-    // })
-  var loggedInAdmin;
-
-      var admin = {
+    var admin = {
       email: 'emily@e.com',
       password: 'lucas',
       isAdmin: true,
@@ -69,69 +49,72 @@ describe('Users Route', function () {
     });
 
     it('returns user list', function(done){
-      supertest(app).get('/api/users')
+      loggedInAdmin.get('/api/users')
       .expect(200)
-      .expect(function(res) {
-        if (!Array.isArray(res.body)) {
-          throw new Error("Not an array")}
-      })
-      .end(function(err) {console.log(err)});
-      done()
+      .end(done);
     });
 
     it('returns single user', function(done) {
-      supertest(app).get('/api/users/1')
+      loggedInAdmin.get('/api/users/1')
       .expect(200)
-      .expect(function(res){
-        console.log(res)
-      })
-      done();
+      .end(function(err, res){
+        if (err) return done(err);
+        expect(res.body).to.exist;
+        expect(res.body.name).to.equal('Testuser Guy');
+        done();
+      });
     });
 
     it('updates user information', function(done){
-      supertest(app).put('/api/users/1').send({name: "Joeyyy"})
+      loggedInAdmin.put('/api/users/1').send({name: "Joeyyy"})
       .expect(201)
-      done();
+      .end(done);
     })
 
   });
 
   describe('for non-admin', function(){
+    var loggedInAgent;
     beforeEach('logs in ordinary user', function(done){
-      var loggedInAgent = supertest.agent(app);
+      loggedInAgent = supertest.agent(app);
       loggedInAgent.post('/login')
       .send(userInfo).end(done)
     });
 
     it('does not return user list', function(done){
-      supertest(app).get('/api/users')
+      loggedInAgent.get('/api/users')
       .expect(401)
-      done();
+      .end(done);
     });
 
     it('does not return single user', function(done){
-      supertest(app).get('/api/users/1')
+      loggedInAgent.get('/api/users/1')
       .expect(401)
-      done();
+      .end(done);
     });
 
   });
 
   describe('User creation',function () {
+
     it('fails if email is already registered',function(done) {
       supertest(app).post('/api/users').send(userInfo)
       .expect(409)
-      done();
+      .end(function (err) {
+        if (err) { done(err); }
+        else done();
+      });
     })
 
     it('creates new account', function(done){
       var newUser = {name: "Judy", email: "judy@gmail.com", password: "juddy"};
       supertest(app).post('/api/users').send(newUser)
       .expect(201)
-      .expect(function(res){
-        res.body.should.have.property("name", "Judy")
-      })
-      done();
+      .end(function (err, res) {
+        if (err) return done(err);
+        expect(res.body.name).to.equal("Judy");
+        done();
+      });
     })
 
   })
