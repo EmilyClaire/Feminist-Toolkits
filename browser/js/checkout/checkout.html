@@ -1,5 +1,5 @@
 <div class="well">
-  <form class="form-horizontal" name='checkoutForm'>
+  <form class="form-horizontal" name='checkoutForm' ng-submit='submitOrder(client.address,client.name,client.email)' >
     <fieldset>
       <legend><h2>Your Order</h2></legend>
 		<h4>Items ({{items.number}})</h4>
@@ -33,7 +33,7 @@
           <div class="alert alert-warning" ng-show='checkoutForm.clientEmail.$error.required&&checkoutForm.clientEmail.$dirty'>Please enter an email</div>
           <div class="alert alert-warning" ng-show='checkoutForm.clientAddress.$error.required&&checkoutForm.clientAddress.$dirty'>Please enter a shipping address</div>
          
-          <button type="submit" class="btn btn-success" ng-click='submitOrder(client.address,client.name,client.email)' ng-disabled='checkoutForm.$error.required'>Submit Order</button>
+          <button type="submit" class="btn btn-success" ng-disabled='checkoutForm.$invalid'>Submit Order</button>
 
         </div>
       </div>
