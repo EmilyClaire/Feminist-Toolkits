@@ -107,7 +107,7 @@ var seedProducts = function () {
         },
         {
             name: 'Magic unicorn cake',
-            description: 'Order this for any event that calls for some extra magic',
+            description: 'Available to pre-order for any event that calls for some extra magic',
             inventory: 0,
             currentPrice: 110,
             photoUrl: '/images/unicorn-cake.jpg'
