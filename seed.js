@@ -30,11 +30,19 @@ var seedUsers = function () {
     var users = [
         {
             email: 'testing@fsa.com',
-            password: 'password'
+            password: 'password',
+            name: 'test'
         },
         {
             email: 'obama@gmail.com',
-            password: 'potus'
+            password: 'potus',
+            name: 'Obama'
+        },
+        {
+            email: 'admin@admin.com',
+            password: 'admin',
+            name: 'admin',
+            isAdmin: true
         }
     ];
 
@@ -197,12 +205,12 @@ var productArr,
 
 db.sync({ force: true })
     .then(function () {
-        return Promise.all([/*seedUsers(), */seedProducts(), seedCategories(), seedReviews()]);
+        return Promise.all([seedUsers(), seedProducts(), seedCategories(), seedReviews()]);
     })
     .then(function (seedArray) {
-        productArr = seedArray[0];
-        categoryArr = seedArray[1];
-        reviewArr = seedArray[2];
+        productArr = seedArray[1];
+        categoryArr = seedArray[2];
+        reviewArr = seedArray[3];
         return Promise.all(reviewArr.map(function (review, i) {
             return review.setProduct(productArr[i]);
         }));
