@@ -1,13 +1,13 @@
 <div class='add-review' ng-show='isLoggedIn()'>
   <form name="reviewForm">
-          <button style="width:100%" ng-disabled="reviewForm.$invalid" ng-submit="addReview(selectedStars, review)"
-            class="btn btn-default btn-warning">
-            <span class="glyphicon glyphicon-star"></span>  Add Review  <span class="glyphicon glyphicon-star"></span>
-          </button>
+
           <select ng-model="selectedStars"
           ng-options="star for star in stars"
           ng-required="true">
           </select>
+
+        <p ng-show="reviewForm.$invalid && reviewForm.reviewText.$dirty">
+            Your review is too short</p>
 
           <textarea ng-model="review"
           name ="reviewText"
@@ -17,6 +17,9 @@
           ng-required="true">
             ...
           </textarea>
-          <p ng-show="reviewForm.$invalid && reviewForm.reviewText.$dirty">Your review is too short</p>
+            <button style="width:100%" ng-disabled="reviewForm.$invalid" ng-submit="addReview(selectedStars, review)"
+            class="btn btn-default btn-warning">
+            <span class="glyphicon glyphicon-star"></span>  Add Review  <span class="glyphicon glyphicon-star"></span>
+          </button>
   </form>
 </div>
