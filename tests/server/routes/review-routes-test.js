@@ -8,7 +8,7 @@ var db = require('../../../server/db');
 var supertest = require('supertest');
 var Promise=require('bluebird');
 
-xdescribe('Reviews Route', function () {
+describe('Reviews Route', function () {
 
     var app, User, Review, Product, productsArr, reviewsArr, user;
 

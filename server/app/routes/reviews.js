@@ -5,11 +5,6 @@ var db = require('../../db');
 var Review = db.model('review');
 var utils = require('./utils');
 
-// var _ = require('lodash');
-
-//insert as second arg of router.get before cb, if needed:
-// ensureAuthenticated()
-
 router.get('/product/:prodId', function (req, res, next) {
   Review.findAll({where: {productId: req.params.prodId}})
   .then(function(reviewArr){
@@ -27,11 +22,35 @@ router.get('/user/:userId', function (req, res, next) {
 });
 
 router.post('/', utils.ensureAuthenticated, function (req, res, next) {
+  var productId = req.body.productId;
+  var userId = req.body.userId;
+  var review;
+
   Review.create(req.body)
   .then(function(createdReview){
-    res.status(201).json(createdReview);
+      review = createdReview;
+    return review.setUser(userId);
+  }).then(function(resultObj){
+    if(resultObj){
+      return review.setProduct(productId)
+    }
+    else{
+        var err = new Error();
+        err.message = "OMG, SOMETHING HAS GONE WRONG. check reviews.js in routes line 38"
+        next(err);
+    }
   })
-  .catch(function(err) { next(err); })
+  .then(function(obj){
+        if(obj){
+        res.status(201).json(review);
+      }
+      else{
+        var err = new Error();
+        err.message = "OMG, SOMETHING HAS GONE WRONG. check reviews.js in routes line 43"
+        next(err);
+      }
+    })
+  .catch(next)
 });
 
 router.delete('/:id', utils.ensureAuthenticated, function (req, res, next) {
