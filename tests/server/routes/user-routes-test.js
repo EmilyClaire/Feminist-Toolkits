@@ -4,58 +4,101 @@ var db = require('../../../server/db');
 var supertest = require('supertest');
 
 describe('Users Route', function () {
-    var app, User;
-    var adminInfo = {
-      email: 'admin@site.com', name: 'Ms. Admin',
-      password: 'Imtheboss', isAdmin: true
-    }
-    var userInfo = {
-      email: 'joe@gmail.com',
-      password: 'shoopdawoop', name: 'User Guy'
-    };
+  var app, User;
+  var adminInfo = {
+    email: 'admin@site.com', name: 'Ms. Admin',
+    password: 'Imtheboss', isAdmin: true
+  }
+  var userInfo = {
+    email: 'joe@gmail.com',
+    password: 'shoopdawoop', name: 'User Guy'
+  };
 
-    beforeEach('Sync DB', function () {
-        return db.sync({ force: true });
-    });
+  beforeEach('Sync DB', function () {
+      return db.sync({ force: true });
+  });
 
-    beforeEach('Create app', function () {
-        app = require('../../../server/app')(db);
-        User = db.model('user');
-    });
+  beforeEach('Create app', function () {
+      app = require('../../../server/app')(db);
+      User = db.model('user');
+  });
 
-    beforeEach('Create a user', function (done) {
-      return User.create(userInfo)
-      .then(function () {
-        return User.create(adminInfo)})
-      .then(function(){
-        done(); })
-      .catch(done);
-    });
-
-
-  it('gets array of users for admin', function (done) {
-    var loggedInAdmin = supertest.agent(app);
-    loggedInAdmin.post('/login')
-    .send(adminInfo)
+  beforeEach('Create regular and admin user', function (done) {
+    return User.create(userInfo)
+    .then(function () {
+      return User.create(adminInfo)})
     .then(function(){
-      loggedInAdmin.get('/api/users')
+      done(); })
+  });
+
+  describe('for admin', function () {
+    beforeEach('logs in admin', function(){
+      var loggedInAdmin = supertest.agent(app);
+      loggedInAdmin.post('/login')
+      .send(adminInfo)
+    })
+
+    it('returns user list', function(done){
+      supertest(app).get('/api/users')
       .expect(200)
       .expect(function(res) {
         if (!Array.isArray(res.body)) {
           throw new Error("Not an array")}
       })
-      .end(done);
+      done();
+    });
+
+    it('returns single user', function(done) {
+      supertest(app).get('/api/users/1')
+      .expect(200)
+      .expect(function(res) {
+        console.log(res);
+      })
+      done();
+    });
+
+  });
+
+  describe('for non-admin', function(){
+    beforeEach('logs in ordinary user', function(){
+      var loggedInAgent = supertest.agent(app);
+      loggedInAgent.post('/login')
+      .send(userInfo)
+    });
+
+    it('does not return user list', function(done){
+      supertest(app).get('/api/users')
+      .expect(401)
+      done();
+    });
+
+    it('does not return single user', function(done){
+      supertest(app).get('/api/users/1')
+      .expect(401)
+      done();
+    });
+
+  });
+
+  describe('User creation',function () {
+    it('fails if email is already registered',function(done) {
+      supertest(app).post('/api/users').send(userInfo)
+      .expect(409)
+      done();
+    })
+
+    it('creates new account', function(done){
+      var newUser = {name: "Judy", email: "judy@gmail.com", password: "juddy"};
+      supertest(app).post('/api/users').send(newUser)
+      .expect(201)
+      .expect(function(res){
+        res.body.should.have.property("name", "Judy")
+      })
+      done();
     })
 
   })
 
-  it('does not return user list for non-admin', function(done){
-    var loggedInAgent = supertest.agent(app);
-    loggedInAgent.post('/login').send(userInfo).end(done);
-
-    supertest(app).get('/api/users')
-    .expect(401)
-    .end(done);
-  });
+  ///Now do PUT !!
 
 });
