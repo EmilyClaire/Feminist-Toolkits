@@ -36,7 +36,11 @@ app.controller('ProductsController', function ($scope, ProductsFactory, Category
     });
 
     $scope.onSelectCategory = function () {
-        $state.go('productsByCategory', { categoryId: $scope.selectedCategory.id });
+        if ($scope.selectedCategory) {
+            $state.go('productsByCategory', { categoryId: $scope.selectedCategory.id });
+        } else {
+            $state.go('products');
+        }
     };
 
 });

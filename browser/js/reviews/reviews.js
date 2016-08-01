@@ -16,5 +16,4 @@ app.config(function ($stateProvider) {
 app.controller('ReviewsController', function ($scope, reviews) {
 
   $scope.reviews = reviews;
-  console.log('THIS IS SCOPE.REVIEWS ', $scope.reviews);
 });

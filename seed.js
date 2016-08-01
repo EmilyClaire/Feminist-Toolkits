@@ -65,7 +65,7 @@ var seedProducts = function () {
         },
         {
             name: 'Skirt',
-            description: 'Don\'t be a bear, be a fairy',
+            description: 'Wear this when you want to be a fairy',
             inventory: 107,
             currentPrice: 30.00,
             photoUrl: '/images/skirt.jpg'
@@ -83,6 +83,34 @@ var seedProducts = function () {
             inventory: 3,
             currentPrice: 1000,
             photoUrl: '/images/antidote.jpg'
+        },
+        {
+            name: 'Care bear onesie',
+            description: 'This care bear onesie will take you over the rainbow!',
+            inventory: 20,
+            currentPrice: 99,
+            photoUrl: '/images/carebear-onesie.jpg'
+        },
+        {
+            name: 'Unicorn leggings',
+            description: 'No words',
+            inventory: 1,
+            currentPrice: 50,
+            photoUrl: '/images/unicorn-pants.jpg'
+        },
+        {
+            name: 'Sleeping bag bear',
+            description: 'Never feel unsafe again',
+            inventory: 11,
+            currentPrice: 1200,
+            photoUrl: '/images/sleeping-bag-bear.jpg'
+        },
+        {
+            name: 'Magic unicorn cake',
+            description: 'Available to pre-order for any event that calls for some extra magic',
+            inventory: 0,
+            currentPrice: 110,
+            photoUrl: '/images/unicorn-cake.jpg'
         }
     ];
 
@@ -104,6 +132,9 @@ var seedCategories = function () {
         },
         {
             name: 'Edibles'
+        },
+        {
+            name: 'Clothing/other'
         }
     ]
 
@@ -138,6 +169,18 @@ var seedReviews = function () {
         {
             stars: 5,
             content: 'This is the best!!!! It works every time and makes all men wear pink and bake fairy cupcakes all day long.'
+        },
+        {
+            stars: 5,
+            content: 'This care bear onesie is the best! It is so comfortable, friendly and feminine, I just want to wear it all the time.'
+        },
+        {
+            stars: 4,
+            content: 'I love these leggings and originally bought them for my job, I\'m a gymnastics coach. I get compliments on these everywhere I go, they are identical to the picture, soft, shiny, and high waisted, although I will say they may not look right on a shorter woman.'
+        },
+        {
+            stars: 5,
+            content: 'I felt so safe and warm in this while camping. Every woman should own one of these.'
         }
     ];
 
@@ -168,10 +211,14 @@ db.sync({ force: true })
         return Promise.all([
             productArr[0].addCategories([categoryArr[0], categoryArr[1]]),
             productArr[1].addCategories([categoryArr[2]]),
-            productArr[2].addCategories([categoryArr[1]]),
+            productArr[2].addCategories([categoryArr[1], categoryArr[3]]),
             productArr[3].addCategories([categoryArr[1]]),
-            productArr[4].addCategories([categoryArr[1], categoryArr[2]])
-            ]);
+            productArr[4].addCategories([categoryArr[1], categoryArr[2]]),
+            productArr[5].addCategories([categoryArr[1], categoryArr[3]]),
+            productArr[6].addCategories([categoryArr[1], categoryArr[3]]),
+            productArr[7].addCategories([categoryArr[0], categoryArr[3]]),
+            productArr[8].addCategories([categoryArr[1], categoryArr[2]])
+        ]);
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));

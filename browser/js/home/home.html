@@ -1,8 +1,11 @@
 <section id="home">
     <h2>WELCOME TO FEMINIST TOOL KITS</h2>
     <h3>Top sellers:</h3>
-    <div ng-repeat="product in products">
-      <h3>{{ product.name }}</h3>
-      <img ng-src="{{ product.photoUrl }}" class="img-thumbnail">
+    <p></p>
+    <div class="row">
+      <div ng-repeat="product in topProducts | orderBy: 'name'" class="col-sm-4">
+        <p><a ui-sref="product({productId: product.id})">{{ product.name }}</a></p>
+        <p><img ng-src="{{ product.photoUrl }}" class="img-thumbnail" width="200" height="200"></p>
+      </div>
     </div>
 </section>

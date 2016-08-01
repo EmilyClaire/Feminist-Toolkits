@@ -1,10 +1,13 @@
 <section class="products">
     <p>
         <label>Choose a category
-            <select name="category" ng-options="category.name for category in categories" ng-model="selectedCategory" ng-change="onSelectCategory()" required></select>
+            <select name="category" ng-options="category.name for category in categories" ng-model="selectedCategory" ng-change="onSelectCategory()" required>
+              <option value="">All</option>
+            </select>
         </label>
     </p>
-    <div ng-repeat="product in products">
+    <div ng-repeat="product in products | orderBy: 'name'">
+      <img ng-src="{{ product.photoUrl }}" class="img-thumbnail" width="50" height="50">
       <a ui-sref="product({productId: product.id})">{{ product.name }}</a>
     </div>
 </section>
