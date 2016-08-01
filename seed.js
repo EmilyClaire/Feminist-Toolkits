@@ -104,6 +104,13 @@ var seedProducts = function () {
             inventory: 11,
             currentPrice: 1200,
             photoUrl: '/images/sleeping-bag-bear.jpg'
+        },
+        {
+            name: 'Magic unicorn cake',
+            description: 'Order this for any event that calls for some extra magic',
+            inventory: 0,
+            currentPrice: 110,
+            photoUrl: '/images/unicorn-cake.jpg'
         }
     ];
 
@@ -209,7 +216,8 @@ db.sync({ force: true })
             productArr[4].addCategories([categoryArr[1], categoryArr[2]]),
             productArr[5].addCategories([categoryArr[1], categoryArr[3]]),
             productArr[6].addCategories([categoryArr[1], categoryArr[3]]),
-            productArr[7].addCategories([categoryArr[0], categoryArr[3]])
+            productArr[7].addCategories([categoryArr[0], categoryArr[3]]),
+            productArr[8].addCategories([categoryArr[1], categoryArr[2]])
         ]);
     })
     .then(function () {
