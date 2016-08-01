@@ -7,15 +7,14 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('CheckoutController', function ($scope,$rootScope,$stateParams) {
+app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,OrderFactory) {
 	$scope.items=JSON.parse($stateParams.items);
 	$scope.items.number=$stateParams.number;
 	$scope.items.total=$stateParams.total;
 	$scope.$on('$stateChangeStart', function (event, next, current) {
 	    $rootScope.$broadcast('backToShopping');
 	});
-	$scope.submitOrder=function(shippingAddress,name,email){
-		console.log(shippingAddress,name,email);
-		/*NEEDS TO BE CONNECTED WITH ROUTES*/
+	$scope.submitOrder=function(shippingAddress,name,email,items){
+		OrderFactory.placeOrder({shippingAddress:shippingAddress,name:name,email:email,products:$scope.items})
 	}
 });
