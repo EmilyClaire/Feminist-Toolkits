@@ -7,6 +7,6 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('CheckoutController', function ($scope) {
+app.controller('ConfirmationController', function ($scope) {
 	console.log('WELL WHOOPDIEDOO')
 });

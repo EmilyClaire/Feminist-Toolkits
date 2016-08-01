@@ -16,7 +16,9 @@ app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,Or
 	});
 	$scope.submitOrder=function(shippingAddress,name,email,items){
 		OrderFactory.placeOrder({shippingAddress:shippingAddress,name:name,email:email,products:$scope.items})
-		// $state.go('confirmation');
+		.then(function(){
+			$state.go('confirmation');
+		})
 
 
 	}
