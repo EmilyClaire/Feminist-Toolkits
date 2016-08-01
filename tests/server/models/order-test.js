@@ -7,7 +7,7 @@ var db = require('../../../server/db');
 
 var Order = db.model('order');
 
-xdescribe('Order model', function () {
+describe('Order model', function () {
 
     beforeEach('Sync DB', function () {
        return db.sync({ force: true });

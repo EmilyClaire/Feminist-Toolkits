@@ -6,7 +6,7 @@ var supertest = require('supertest');
 
 var Promise = require('bluebird');
 
-xdescribe('Categories Route', function () {
+describe('Categories Route', function () {
 
     var app, User, Category, catArr;
 

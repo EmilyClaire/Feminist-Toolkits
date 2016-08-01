@@ -5,7 +5,7 @@ var Category = require('../../../server/db/models/category');
 var db = require('../../../server/db/_db');
 
 
-xdescribe('Category Model', function () {
+describe('Category Model', function () {
 
   /**
    * First we clear the database and recreate the tables before beginning each run
