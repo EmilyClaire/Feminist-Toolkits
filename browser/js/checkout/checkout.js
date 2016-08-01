@@ -7,7 +7,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,OrderFactory) {
+app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,OrderFactory,$state) {
 	$scope.items=JSON.parse($stateParams.items);
 	$scope.items.number=$stateParams.number;
 	$scope.items.total=$stateParams.total;
@@ -16,5 +16,8 @@ app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,Or
 	});
 	$scope.submitOrder=function(shippingAddress,name,email,items){
 		OrderFactory.placeOrder({shippingAddress:shippingAddress,name:name,email:email,products:$scope.items})
+		// $state.go('confirmation');
+
+
 	}
 });
