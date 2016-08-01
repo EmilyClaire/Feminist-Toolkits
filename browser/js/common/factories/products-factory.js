@@ -8,14 +8,32 @@ app.factory('ProductsFactory', function ($http) {
     return response.data;
   }
 
-  ProductsFactory.fetchAll = function () {
-    return $http.get('/api/products')
+  ProductsFactory.fetchAll = function (categoryId) {
+
+    var queryParams = {};
+
+    if (categoryId) {
+      queryParams.categoryId = categoryId;
+    }
+
+    return $http.get('/api/products', {
+      params: queryParams
+    })
     .then(getData);
   };
 
   ProductsFactory.fetchById = function (id) {
     return $http.get('/api/products/' + id)
     .then(getData);
+  };
+
+  ProductsFactory.create = function (data) {
+      return $http.post('/products', data)
+      .then(getData)
+      .then(function (newProduct) {
+        var product = newProduct;
+        return product;
+      });
   };
 
   return ProductsFactory;

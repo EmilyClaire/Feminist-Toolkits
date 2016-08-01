@@ -15,9 +15,11 @@ app.config(function ($stateProvider) {
 
 app.controller('ProductController', function ($scope, theProduct, $rootScope) {
 
-  $scope.product = theProduct;
+  $scope.product = theProduct.product;
+  $scope.categories = theProduct.categories;
+
   $scope.addItem=function(){
-    $rootScope.$broadcast('addingItemToCart',theProduct);
+    $rootScope.$broadcast('addingItemToCart',theProduct.product);
   }
 
 });
