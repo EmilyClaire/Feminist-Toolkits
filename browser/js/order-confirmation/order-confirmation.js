@@ -1,7 +1,7 @@
 app.config(function ($stateProvider) {
     $stateProvider.state('confirmation', {
         url: '/confirmation',
-        controller: 'ConfirmationController',
+        /*controller: 'ConfirmationController',*/
         templateUrl: 'js/order-confirmation/order-confirmation.html'
     });
 
