@@ -51,7 +51,11 @@ describe('Users Route', function () {
     it('returns user list', function(done){
       loggedInAdmin.get('/api/users')
       .expect(200)
-      .end(done);
+      .end(function(err,res){
+        if (err) {done(err); }
+        expect(res.body).to.have.lengthOf(2);
+        done();
+      });
     });
 
     it('returns single user', function(done) {
@@ -87,11 +91,17 @@ describe('Users Route', function () {
       .end(done);
     });
 
-    it('does not return single user', function(done){
-      loggedInAgent.get('/api/users/1')
+    it('does not return another user', function(done){
+      loggedInAgent.get('/api/users/2')
       .expect(401)
       .end(done);
     });
+
+    it('updates user information', function(done){
+      loggedInAgent.put('/api/users/1').send({name: "Joey"})
+      .expect(201)
+      .end(done);
+    })
 
   });
 

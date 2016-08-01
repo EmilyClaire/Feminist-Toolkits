@@ -41,6 +41,7 @@ router.post('/', function (req, res, next) {
 
 router.put('/:userId', function (req, res, next) {
   if (req.user.id===req.params.userId || req.user.isAdmin) {
+    console.log("PUT route >>>>>>> ",req.params.userId)
     User.findById(req.params.userId)
     .then(function(userInstance){
       return userInstance.update(req.body)
@@ -53,6 +54,14 @@ router.put('/:userId', function (req, res, next) {
   else(function () {
     res.sendStatus(401)
   });
+});
+
+router.delete('/:userId', utils.ensureAdmin, function (req, res, next) {
+  User.findOne({where: {id: req.params.userId}})
+  .then(function(user){
+    return user.destroy()
+  })
+  .catch(next);
 });
 
 module.exports= router;
