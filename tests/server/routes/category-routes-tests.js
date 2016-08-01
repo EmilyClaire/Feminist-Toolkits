@@ -6,7 +6,7 @@ var supertest = require('supertest');
 
 var Promise = require('bluebird');
 
-describe('Categories Route', function () {
+xdescribe('Categories Route', function () {
 
     var app, User, Category, catArr;
 
@@ -146,7 +146,7 @@ describe('Categories Route', function () {
     });
   });
 
-  describe('Authenticated request', function () {
+  xdescribe('Authenticated request', function () {
 
     var loggedInAgent;
 

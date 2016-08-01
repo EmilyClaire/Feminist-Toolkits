@@ -2,6 +2,10 @@
 var router = require('express').Router();
 var Order=require('../../db/models/order.js');
 var User=require('../../db/models/user.js');
+var Product=require('../../db/models/product.js');
+var OrderProduct=require('../../db/models/order-products.js');
+
+
 var Promise=require('bluebird');
 
 var utils=require('./utils');
@@ -11,7 +15,7 @@ var ensureAdmin=utils.ensureAdmin;
 
 
 router.get('/',ensureAdmin, function (req, res,next) {
-    Order.findAll()
+    Order.findAll({include: { model: Product}})
     .then(function(orders){
         res.send(orders);
     })
@@ -38,6 +42,7 @@ router.post('/',function (req, res,next) {
     //req.body should contain shippingAddress, name, email, items
     var userPromise;
     var orderPromise;
+    var orderId;
     var ids=req.body.products.map(function(product){return product.id})
     userPromise=User.findOrCreate({
         where: 
@@ -51,11 +56,14 @@ router.post('/',function (req, res,next) {
         if(!req.isAuthenticated()){
             var user=findCreateResult[0];
         } else{ user=req.user}
+        orderId=order.id;
         return order.setUser(user);
     })
     .then(function(order){
-        order.addProducts(ids)
-        return order;
+        return order.setProducts(ids)
+    })
+    .then(function(order){
+        return Order.findById(orderId,{include: { model: Product}})
     })
     .then(function(order){
         res.status(201).send(order); 

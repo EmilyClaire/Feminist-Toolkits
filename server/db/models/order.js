@@ -17,15 +17,6 @@ module.exports = db.define('order', {
             type: Sequelize.STRING,
             allowNull: false
         }
-    },{
-        instanceMethods: {
-            fetchProducts: function () {
-                OrderProduct.findAll({where: {orderId: this.id}})
-                .then(function(products){
-                    return products;
-                })
-            }
-        }
     });
 
 //EXTRA NOTES:

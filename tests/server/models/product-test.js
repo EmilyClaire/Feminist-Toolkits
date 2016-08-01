@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var Product = require('../../../server/db/models/product');
 var db = require('../../../server/db/_db');
 
-describe('Products', function () {
+xdescribe('Products', function () {
 
   /**
    * First we clear the database and recreate the tables before beginning each run

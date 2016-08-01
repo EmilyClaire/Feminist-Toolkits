@@ -10,7 +10,7 @@ var db = require('../../../server/db/_db');
 var OrderProducts=require('../../../server/db/models/order-products');
 var Promise=require('bluebird');
 
-describe('Relations',function(){ 
+xdescribe('Relations',function(){ 
 
   var categoriesArr;
   var productsArr;

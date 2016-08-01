@@ -8,7 +8,7 @@ var db = require('../../../server/db');
 var Review = require('../../../server/db/models/review.js')
 
 
-describe('Review model', function () {
+xdescribe('Review model', function () {
 
     beforeEach('Sync DB', function () {
         return db.sync({ force: true });

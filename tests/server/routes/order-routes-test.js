@@ -193,6 +193,13 @@ describe('Orders Routes', function () {
         .end(function(err, res){
           if(err) return done(err);
           expect(res.body.shippingAddress).to.eql('my house');
+          expect(res.body.products).to.be.an('array');
+          expect(res.body.products).to.have.lengthOf(2);
+          var productNames=res.body.products.map(function(product){
+            return product.name;
+          })
+          expect(productNames).to.contain('Pie City');
+          expect(productNames).to.contain('Apple City');
           done();
         });
       });
