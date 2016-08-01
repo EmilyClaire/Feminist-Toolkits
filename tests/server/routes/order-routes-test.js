@@ -8,7 +8,7 @@ var Promise=require('bluebird');
 
 describe('Orders Routes', function () {
 
-    var app, User,Order;
+    var app, User,Order,Product,product1,product2;
 
     beforeEach('Sync DB', function () {
         return db.sync({ force: true });
@@ -18,6 +18,7 @@ describe('Orders Routes', function () {
         app = require('../../../server/app')(db);
         User = db.model('user');
         Order = db.model('order'); 
+        Product=db.model('product');
     });
     beforeEach('Seed order database', function (){
       var user1;
@@ -38,6 +39,11 @@ describe('Orders Routes', function () {
         isAdmin: true,
         name: 'Emily'
       };
+
+      var product1Info={ name: 'Unicorn robot', description: 'Most beautiful creature', inventory: 10, currentPrice: 100.00};
+      var product2Info={ name: 'Unicorn puppy', description: '2nd most beautiful creature', inventory: 100, currentPrice: 10.00};
+
+      var productPromises=[Product.create(product1Info),Product.create(product2Info)];
       var orderPromises=[Order.create({shippingAddress: 'Banana City'}),Order.create({shippingAddress: 'Apple City'}),Order.create({shippingAddress: 'Pie City'})]
       var userPromises=[User.create(user1Info),User.create(user2Info),User.create(user3Info)];
       Promise.all(userPromises)
@@ -46,6 +52,11 @@ describe('Orders Routes', function () {
         user2=user2Result;
       })
       .then(function(){
+        return Promise.all(productPromises)
+      })  
+      .then(function(products){
+        product1=products[0];
+        product2=products[1];
         return Promise.all(orderPromises)
       })  
       .then(function(orders){
@@ -82,7 +93,7 @@ describe('Orders Routes', function () {
     });
     describe('can post an order',function(){
       it('gets 201 for a filled out order' , function (done) {
-        guestAgent.post('/api/orders').send({name: 'Imaguest',shippingAddress:'my house', email:'bob@bob.com'})
+        guestAgent.post('/api/orders').send({name: 'Imaguest',shippingAddress:'my house', email:'bob@bob.com',products:[product1,product2]})
         .expect(201)
         .end(function(err, res){
           if(err) return done(err);
@@ -91,7 +102,7 @@ describe('Orders Routes', function () {
         });
       });
       it('gets 500 for an incomplete order' , function (done) {
-        guestAgent.post('/api/orders').send({name: 'Imaguest', email:'bob2@bob.com'})
+        guestAgent.post('/api/orders').send({name: 'Imaguest', email:'bob2@bob.com',products:[product1,product2]})
         .expect(500)
         .end(function(err, res){
           if(err) return done(err);
@@ -177,7 +188,7 @@ describe('Orders Routes', function () {
         })
     });
     it('can post an order' , function (done) {
-        loggedInAgent.post('/api/orders').send({name: 'whatevs',shippingAddress:'my house', email:'bobby@bob.com'})
+        loggedInAgent.post('/api/orders').send({name: 'whatevs',shippingAddress:'my house', email:'bobby@bob.com',products: [product1,product2]})
         .expect(201)
         .end(function(err, res){
           if(err) return done(err);
