@@ -1,6 +1,5 @@
 'use strict';
 var router = require('express').Router();
-
 var User = require('../../db/models/user');
 var utils = require('./utils')
 
@@ -39,8 +38,21 @@ router.post('/', function (req, res, next) {
   .catch(next);
 });
 
-// router.put('/', function (req, res, next) {
-
-// });
+router.put('/:userId', function (req, res, next) {
+  if (req.user.id===req.params.userId || req.user.isAdmin) {
+    User.findById(req.params.userId)
+    .then(function(userInstance){
+      return userInstance.update(req.body)
+    })
+    .then(function (userUpdated) {
+      console.log(userUpdated)
+      res.status(201).send(userUpdated)
+    })
+    .catch(next);
+  }
+  else(function () {
+    res.sendStatus(401)
+  });
+});
 
 module.exports= router;

@@ -5,10 +5,7 @@ var supertest = require('supertest');
 
 describe('Users Route', function () {
   var app, User;
-  var adminInfo = {
-    email: 'admin@site.com', name: 'Ms. Admin',
-    password: 'Imtheboss', isAdmin: true
-  }
+
   var userInfo = {
     email: 'joe@gmail.com',
     password: 'shoopdawoop', name: 'User Guy'
@@ -23,20 +20,53 @@ describe('Users Route', function () {
       User = db.model('user');
   });
 
-  beforeEach('Create regular and admin user', function (done) {
+  beforeEach('Create regular user', function (done) {
     return User.create(userInfo)
-    .then(function () {
-      return User.create(adminInfo)})
     .then(function(){
       done(); })
+    .catch(done);
   });
 
   describe('for admin', function () {
-    beforeEach('logs in admin', function(){
-      var loggedInAdmin = supertest.agent(app);
-      loggedInAdmin.post('/login')
-      .send(adminInfo)
-    })
+    // var loggedInAdmin;
+    // var adminInfo = { email: 'emily@e.com',
+    //   password: 'lucas',
+    //   isAdmin: true,
+    //   name: 'Emily' }
+
+    // beforeEach('Create admin user', function (done){
+    //   return User.create(adminInfo)
+    //   .then(function(){
+    //     done(); })
+    //   .catch(done);
+
+    // });
+
+    // beforeEach('logs in admin', function(done){
+    //   loggedInAdmin = supertest.agent(app);
+    //   return loggedInAdmin.post('/login')
+    //   .send(adminInfo).end(done)
+    //   done();
+    // })
+  var loggedInAdmin;
+
+      var admin = {
+      email: 'emily@e.com',
+      password: 'lucas',
+      isAdmin: true,
+      name: 'Emily'
+    };
+
+    beforeEach('Create an admin', function (done){
+        return User.create(admin).then(function () {
+          done()
+      }).catch(done);
+    });
+
+    beforeEach('Create loggedInAdmin admin and authenticate', function (done) {
+      loggedInAdmin = supertest.agent(app);
+      loggedInAdmin.post('/login').send(admin).end(done);
+    });
 
     it('returns user list', function(done){
       supertest(app).get('/api/users')
@@ -45,25 +75,32 @@ describe('Users Route', function () {
         if (!Array.isArray(res.body)) {
           throw new Error("Not an array")}
       })
-      done();
+      .end(function(err) {console.log(err)});
+      done()
     });
 
     it('returns single user', function(done) {
       supertest(app).get('/api/users/1')
       .expect(200)
-      .expect(function(res) {
-        console.log(res);
+      .expect(function(res){
+        console.log(res)
       })
       done();
     });
 
+    it('updates user information', function(done){
+      supertest(app).put('/api/users/1').send({name: "Joeyyy"})
+      .expect(201)
+      done();
+    })
+
   });
 
   describe('for non-admin', function(){
-    beforeEach('logs in ordinary user', function(){
+    beforeEach('logs in ordinary user', function(done){
       var loggedInAgent = supertest.agent(app);
       loggedInAgent.post('/login')
-      .send(userInfo)
+      .send(userInfo).end(done)
     });
 
     it('does not return user list', function(done){
@@ -99,6 +136,5 @@ describe('Users Route', function () {
 
   })
 
-  ///Now do PUT !!
 
 });
