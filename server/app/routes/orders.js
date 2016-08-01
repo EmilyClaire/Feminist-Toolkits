@@ -15,7 +15,7 @@ var ensureAdmin=utils.ensureAdmin;
 
 
 router.get('/',ensureAdmin, function (req, res,next) {
-    Order.findAll({include: { model: Product}})
+    Order.findAll()
     .then(function(orders){
         res.send(orders);
     })
@@ -63,7 +63,7 @@ router.post('/',function (req, res,next) {
         return order.setProducts(ids)
     })
     .then(function(order){
-        return Order.findById(orderId,{include: { model: Product}})
+        return Order.findById(orderId);
     })
     .then(function(order){
         res.status(201).send(order); 

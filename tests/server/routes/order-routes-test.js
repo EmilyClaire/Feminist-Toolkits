@@ -198,8 +198,8 @@ describe('Orders Routes', function () {
           var productNames=res.body.products.map(function(product){
             return product.name;
           })
-          expect(productNames).to.contain('Pie City');
-          expect(productNames).to.contain('Apple City');
+          expect(productNames).to.contain('Unicorn puppy');
+          expect(productNames).to.contain('Unicorn robot');
           done();
         });
       });
@@ -267,6 +267,7 @@ describe('Orders Routes', function () {
         .expect(200)
         .end(function(err, res){
           if(err) return done(err);
+          expect(res.body[0].products).to.be.an('array');
           expect(res.body).to.be.an('array')
           expect(res.body).to.have.lengthOf(3);
           var shippingAddresses=res.body.map(function(order){

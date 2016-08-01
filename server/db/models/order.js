@@ -2,7 +2,7 @@
 var Sequelize = require('sequelize');
 
 var db = require('../_db');
-var OrderProduct=require('./order-products');
+var Product=require('./product');
 
 module.exports = db.define('order', {
         date: {
@@ -17,7 +17,7 @@ module.exports = db.define('order', {
             type: Sequelize.STRING,
             allowNull: false
         }
-    });
+    },{defaultScope: {include: { model: Product}}});
 
 //EXTRA NOTES:
 // Need to connect with session id?
