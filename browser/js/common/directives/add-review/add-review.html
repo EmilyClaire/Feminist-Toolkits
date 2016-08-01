@@ -17,6 +17,6 @@
           ng-required="true">
             ...
           </textarea>
-          <p ng-hide="reviewForm.$valid">Your review is too short</p>
+          <p ng-show="reviewForm.$invalid && reviewForm.reviewText.$dirty">Your review is too short</p>
   </form>
 </div>
