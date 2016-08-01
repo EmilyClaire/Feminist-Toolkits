@@ -306,12 +306,13 @@ describe('Categories Route', function () {
       });
     });
 
-  it('edit a category and get a 200 message', function (done){
+  it('edit a category and get a 304 message', function (done){
       adminAgent.put('/api/categories/1').send({name: 'cheese'})
-      .expect(201)
+      .expect(200)
       .end(function(err, res){
         if(err) return done(err);
-        expect(res.body.name).to.be.empty;
+
+        expect(res.body.name).to.eql('cheese');
         catArr[0] = {id: 1, name: 'cheese'};
 
         getAll(Category)
