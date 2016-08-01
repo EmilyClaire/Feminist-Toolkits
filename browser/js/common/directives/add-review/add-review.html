@@ -1,0 +1,22 @@
+<div class='add-review' ng-show='isLoggedIn()'>
+  <form name="reviewForm">
+          <button style="width:100%" ng-disabled="reviewForm.$invalid" ng-submit="addReview(selectedStars, review)"
+            class="btn btn-default btn-warning">
+            <span class="glyphicon glyphicon-star"></span>  Add Review  <span class="glyphicon glyphicon-star"></span>
+          </button>
+          <select ng-model="selectedStars"
+          ng-options="star for star in stars"
+          ng-required="true">
+          </select>
+
+          <textarea ng-model="review"
+          name ="reviewText"
+          style="width:100%"
+          ng-minlength="10"
+          ng-trim="true"
+          ng-required="true">
+            ...
+          </textarea>
+          <p ng-hide="reviewForm.$valid">Your review is too short</p>
+  </form>
+</div>
