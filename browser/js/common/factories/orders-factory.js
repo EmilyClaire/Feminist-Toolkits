@@ -14,7 +14,6 @@ app.factory('OrderFactory', function ($http) {
   };
 
   OrderFactory.placeOrder = function (order) {
-    console.log('in order factory');
     return $http.post('/api/orders',order)
     .then(getData);
   };
