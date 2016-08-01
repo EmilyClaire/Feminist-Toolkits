@@ -2,6 +2,7 @@
 var Sequelize = require('sequelize');
 
 var db = require('../_db');
+var Category = require('./category');
 
 module.exports = db.define('product', {
     name: {
@@ -35,5 +36,11 @@ module.exports = db.define('product', {
     photoUrl: {
         type: Sequelize.STRING,
         defaultValue: '/Users/Mac/GraceHopper/Feminist-Toolkits/public/images/default.png'
+    }
+}, {
+    defaultScope: {
+        include: [{
+            model: Category
+        }]
     }
 });

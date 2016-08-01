@@ -3,44 +3,31 @@ app.config(function ($stateProvider) {
     $stateProvider.state('products', {
         url: '/products',
         controller: 'ProductsController',
-        templateUrl: 'js/products/products.html'
-    });
-
-    $stateProvider.state('productsByCategory', {
-        url: '/products/categories/:categoryId',
-        controller: 'ProductsController',
-        templateUrl: 'js/products/products.html'
+        templateUrl: 'js/products/products.html',
+        resolve: {
+            products: function (ProductsFactory) {
+                return ProductsFactory.fetchAll();
+            },
+            categories: function (CategoryFactory) {
+                return CategoryFactory.fetchAll();
+            }
+        }
     });
 });
 
-app.controller('ProductsController', function ($scope, ProductsFactory, CategoryFactory, $state, $stateParams) {
+app.controller('ProductsController', function ($scope, $state, products, categories) {
 
-    if ($stateParams.categoryId) {
-        ProductsFactory.fetchAll($stateParams.categoryId)
-        .then(function (products) {
-            $scope.products = products;
-        })
-    } else {
-        ProductsFactory.fetchAll()
-        .then(function (products) {
-            $scope.products = products;
-        })
-    }
+    $scope.products = products;
+    $scope.categories = categories;
 
-    CategoryFactory.fetchAll()
-    .then(function (categories) {
-        $scope.selectedCategory = categories.filter(function (category) {
-            return category.id === Number($stateParams.categoryId);
-        })[0];
-        $scope.categories = categories;
-    });
-
-    $scope.onSelectCategory = function () {
+    $scope.categoryFilter = function (value) {
         if ($scope.selectedCategory) {
-            $state.go('productsByCategory', { categoryId: $scope.selectedCategory.id });
+            return value.categories.some(function (cat) {
+                return cat.id === $scope.selectedCategory.id;
+            });
         } else {
-            $state.go('products');
+            return true;
         }
-    };
+    }
 
 });
