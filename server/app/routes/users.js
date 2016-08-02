@@ -27,9 +27,9 @@ router.get('/:userId', function (req, res, next) {
 
 router.get('/:userId/orderHistory',utils.ensureAuthenticated,function(req,res,next){
   //added by Sarah to test frontend
-  Order.findAll({where: {userId: userId}})
+  Order.findAll({where: {userId: req.params.userId}})
   .then(function(orders){
-    if(ensureAdminOrSameUser(req,orers[0])){
+    if(utils.ensureAdminOrSameUser(req,orders[0])){
       res.send(orders);
     } else{
       res.sendStatus(401);
