@@ -7,7 +7,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,OrderFactory,$state,AuthService,Session,UserFactory) {
+app.controller('CheckoutController', function ($scope,$stateParams,OrderFactory,$state,AuthService,Session,UserFactory,$cookieStore,$rootScope) {
 	$scope.loggedIn=false;
     AuthService.getLoggedInUser().then(function (user) {
     	if(user){
@@ -15,11 +15,12 @@ app.controller('CheckoutController', function ($scope,$rootScope,$stateParams,Or
         	$scope.loggedIn=true;
         }
     });
-	$scope.cart=$rootScope.cart;
+	$scope.cart=$cookieStore.get('cart');
 	$scope.submitOrder=function(){
-		OrderFactory.placeOrder({shippingAddress:$scope.client.address,name:$scope.client.name,email:$scope.client.email,products:$scope.items})
+		OrderFactory.placeOrder({shippingAddress:$scope.client.address,name:$scope.client.name,email:$scope.client.email,products:$scope.cart.items})
 		.then(function(){
 			$state.go('confirmation');
+			$rootScope.$broadcast('emptyCart',{});
 		})		
 	}
 });
