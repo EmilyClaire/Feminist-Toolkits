@@ -8,7 +8,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('SignupCtrl', function ($scope, $http) {
+app.controller('SignupCtrl', function ($scope, $http, AuthService, $state) {
 // AuthService, $state,
     $scope.login = {};
     $scope.error = null;
@@ -24,16 +24,13 @@ app.controller('SignupCtrl', function ($scope, $http) {
             else {throw new Error('Unable to create account.')}
         }).then(function () {
             $state.go('home');
-        }).catch(function () {
-            $scope.error = 'Unable to complete login.';
+        }).catch(function (err) {
+            console.log(err);
+            if (err.status === 409) {
+                $scope.error = 'Unable to create account. There is already an account with this email.';
+            }
+            else {$scope.error = 'Unable to complete login.'; }
         });
-
-        // AuthService.login(loginInfo).then(function () {
-        //     $state.go('home');
-        // }).catch(function () {
-        //     $scope.error = 'Invalid login credentials.';
-        // });
-
     };
 
 });
