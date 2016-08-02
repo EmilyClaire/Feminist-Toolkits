@@ -1,0 +1,44 @@
+<div class="well">
+  <form class="form-horizontal" name='updateForm' ng-submit='submitOrder()' >
+    <fieldset>
+      <legend><h2>Product Information</h2></legend>
+      <div class='well'><center><img src="{{currPhotoUrl}}" style="max-height:300px"/></center></div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Name</label>
+        <div class="col-xs-10">
+          <input ng-value='product.name' name='productName' class="form-control" type="text" ng-model='product.name' required>
+        </div>
+        <label class="col-xs-2 control-label">Description</label>
+        <div class="col-xs-10">
+          <textarea rows="3" ng-value="product.description" name='productDescription' class="form-control" ng-model='product.description' required></textarea>
+        </div>
+        <label class="col-xs-2 control-label">Inventory</label>
+        <div class="col-xs-10">
+          <input ng-value='product.inventory' name='productInventory' class="form-control" type="integer"  ng-model='product.inventory' required>
+        </div>
+        <label class="col-xs-2 control-label">Price</label>
+        <div class="col-xs-10">
+          <input name='productPrice' type="text" class="form-control" ng-model='product.currentPrice' ng-value='product.currentPrice' required>
+        </div>
+        <label class="col-xs-2 control-label">Photo URL</label>
+        <div class="col-xs-6">
+          <input name='productUrl' type='url' ng-value='product.photoUrl' class="form-control" ng-model='product.photoUrl'>
+        </div>
+        <div class="col-xs-4">
+          <button class="btn btn-warning" ng-click="updateCurrPhoto(product.photoUrl)">Update Preview</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-10 col-xs-offset-2">
+          <div class="alert alert-warning" ng-show='updateForm.productName.$error.required&&updateForm.productName.$dirty'>Please enter a name.</div>
+          <div class="alert alert-warning" ng-show='updateForm.productDescription.$error.required&&updateForm.productDescription.$dirty'>Please enter a description.</div>
+          <div class="alert alert-warning" ng-show='updateForm.productInventory.$error.required&&updateForm.productInventory.$dirty'>Inventory: Please enter an integer.</div>
+          <div class="alert alert-warning" ng-show='updateForm.productInventory.$error.required&&updateForm.productPrice.$dirty'>Price: Please enter a decimal</div> 
+          <button type="submit" class="btn btn-success" ng-disabled='updateForm.$invalid'>Edit Product</button>
+
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+</div>
