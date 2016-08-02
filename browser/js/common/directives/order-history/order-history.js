@@ -19,7 +19,6 @@ app.directive('orderHistory', function ($state,OrderFactory,AuthService) {
                   return dateOut;
             };            
             var calcTotal=function(order){
-                console.log(order);
                 var sum=0;
                 var orderProduct;
                 for (var i=0; i<order.products.length; i++){
