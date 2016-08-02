@@ -1,12 +1,27 @@
-<div class="well">
-    <legend><h3>{{ product.name }} <button style="float:right" ng-click="addItem()">Add Item To Cart</button></h3></legend>
-    <div class="well"><center><img style="max-height:300px" ng-src="{{ product.photoUrl }}"></center></div>
-    <p><i><center>{{ product.description }}</i></center></p>
-    <div class='well'>
-        <p><b>Inventory:</b> {{ product.inventory }}</p>
-        <p><b>Price:</b> {{ product.currentPrice }} USD</p>
+
+<div class="product well">
+    <legend><h3>{{ product.name }} <button style="float:right" class ="btn btn-primary btn-sm" ng-click="addItem()">Add To Cart</button> <button style="float:right" class="btn btn-info btn-sm" ui-sref="reviews({productId: product.id})">Reviews</button>
+
+</h3></legend>
+    <div class='well well-sm'>
+        <center><img style="width:50%" ng-src="{{ product.photoUrl }}"></center>
     </div>
-    <p ui-sref-active="active"><a ui-sref="reviews({productId: product.id})">Check out reviews for {{ product.name }}</a>
-    <p ui-sref-active="active"><b>Categories:</b> <a ng-repeat="category in categories"
-    ui-sref="products({categoryId: category.id})">{{ category.name + ' ' }}</a><br>
+    <div class='well'>
+        <legend>About</legend>
+        <center><p>
+                    <i>{{ product.description }}</i><br> 
+                    <b>{{ product.currentPrice }}</b> USD |
+                    <b>{{ product.inventory }}</b> left. </p>
+        </center>
+
+        </div>
+        <div class='well'>
+            <legend>Browse Similar In:</legend>
+            <p ui-sref-active="active"><button class='btn btn-default' ng-repeat="category in categories"
+            ui-sref="products({categoryId: category.id})">{{category.name}}</button> 
+        </div>
+
+ 
+
+    </div>
 </div>
