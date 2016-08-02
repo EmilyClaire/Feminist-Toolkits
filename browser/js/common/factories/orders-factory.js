@@ -13,6 +13,11 @@ app.factory('OrderFactory', function ($http) {
     .then(getData);
   };
 
+  OrderFactory.fetchUsersOrders = function (userId) {
+    return $http.get('/api/users/'+userId+'/orderHistory')
+    .then(getData);
+  };
+
   OrderFactory.placeOrder = function (order) {
     return $http.post('/api/orders',order)
     .then(getData);

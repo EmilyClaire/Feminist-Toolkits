@@ -45,6 +45,8 @@ router.post('/',function (req, res,next) {
     var orderId;
     var ids=req.body.products.map(function(product){return product.id})
     var prices=req.body.products.map(function(product){return product.currentPrice})
+    var quantitites=req.body.products.map(function(product){return product.quantity})
+
     userPromise=User.findOrCreate({
         where: 
             {email: req.body.email},  
@@ -63,7 +65,7 @@ router.post('/',function (req, res,next) {
     .then(function(order){
         var productsPromises=[]
         for (var i=0; i<ids.length; i++){
-            productsPromises.push(order.setProducts(ids[i],{priceAtPurchase: prices[i]}));
+            productsPromises.push(order.setProducts(ids[i],{priceAtPurchase: prices[i],quantity: quantitites[i]}));
         }
         return Promise.all(productsPromises);
     })

@@ -1,0 +1,18 @@
+<div class='well'>
+	<legend>
+		Your Order History
+	</legend>
+
+		<div class='well' ng-repeat="order in orders | orderBy: '-createdAt'">
+
+			<h4 ng-bind="formatDate(order.createdAt) |  date:'MM-dd-yyyy HH:mm:ss EST'">
+			</h4>
+			<div class='well' ng-repeat='product in order.products'>
+					<p>{{product.order_products.quantity}} <b>{{product.name}}</b>: ${{product.order_products.priceAtPurchase*product.order_products.quantity}}</p>
+			</div>
+			<p><b>Total:</b> ${{order.total}}</p>
+			<p><b>Status:</b> {{order.status}}</p>
+			<p><b>Shipping Address:</b> {{order.shippingAddress}}</p>
+		</div>
+
+</div>
