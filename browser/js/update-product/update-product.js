@@ -12,7 +12,8 @@ app.config(function ($stateProvider) {
 });
 
 
-app.controller('UpdateProductController', function ($scope, productBundle,$stateParams) {
+app.controller('UpdateProductController', function ($state,$scope, productBundle,$stateParams,ProductsFactory) {
+	$scope.somethingWrong=false;
 	if($stateParams.id){
 		$scope.product=productBundle.product;
 		$scope.categories=productBundle.categories;
@@ -26,12 +27,22 @@ app.controller('UpdateProductController', function ($scope, productBundle,$state
 		$scope.currPhotoUrl=url;
 	}
 	$scope.submitUpdate=function(url){
+		var productPromise;
 		if($scope.goal==='update'){
-
+			productPromise=ProductsFactory.update($scope.product.id,$scope.product);
 		}
 		else if($scope.goal==='create'){
-
+			productPromise=ProductsFactory.create($scope.product);
 		}
+		productPromise.then(function(result){
+			if(result){
+				var product=result.product;
+				$state.go('products', {id:product.id});
+			}
+			else{
+				$scope.somethingWrong=true;
+			}
+		})
 	}
 
 });

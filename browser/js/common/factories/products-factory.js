@@ -36,7 +36,7 @@ app.factory('ProductsFactory', function ($http) {
   };
 
   ProductsFactory.update = function (id,data) {
-      return $http.put('/api/products'+id, data)
+      return $http.put('/api/products/'+id, data)
       .then(getData)
       .then(function (newProduct) {
         return newProduct;
