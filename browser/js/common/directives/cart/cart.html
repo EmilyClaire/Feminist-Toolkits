@@ -14,7 +14,7 @@
 	</legend>
 	<div ng-show="expandCart">
 		<div>
-			<h4 ng-hide='cartIsEmpty()'>Items: {{number}}</h4>
+			<h4 ng-hide='cartIsEmpty()'>Items: {{cart.numItems}}</h4>
 				<div class='well' ng-repeat='item in cart.items'>
 					<h4>
 						{{item.name}}
