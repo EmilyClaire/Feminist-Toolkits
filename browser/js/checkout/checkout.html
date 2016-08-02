@@ -1,5 +1,5 @@
 <div class="well">
-  <form class="form-horizontal" name='checkoutForm' ng-submit='submitOrder(client.address,client.name,client.email)' >
+  <form class="form-horizontal" name='checkoutForm' ng-submit='submitOrder()' >
     <fieldset>
       <legend><h2>Your Order</h2></legend>
 		<h4>Items ({{items.number}})</h4>
@@ -12,15 +12,14 @@
 		</table>
 	<h4>Total: ${{items.total}}</h4>  
       <legend><h2>Your Information</h2></legend>
-    
       <div class="form-group">
         <label class="col-xs-2 control-label">Name</label>
         <div class="col-xs-10">
-          <input name='clientName' class="form-control" type="text" ng-model='client.name' required>
+          <input ng-value='client.name' name='clientName' class="form-control" type="text" ng-model='client.name' ng-disabled="loggedIn" required>
         </div>
         <label class="col-xs-2 control-label">Email</label>
         <div class="col-xs-10">
-          <input name='clientEmail' class="form-control" type="email"  ng-model='client.email' required>
+          <input ng-disabled="loggedIn" ng-value='client.email' name='clientEmail' class="form-control" type="email"  ng-model='client.email' required>
         </div>
         <label class="col-xs-2 control-label">Shipping Address</label>
         <div class="col-xs-10">
