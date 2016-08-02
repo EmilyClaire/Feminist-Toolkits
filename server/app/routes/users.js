@@ -1,6 +1,7 @@
 'use strict';
 var router = require('express').Router();
 var User = require('../../db/models/user');
+var Order=require('../../db/models/order');
 var utils = require('./utils')
 
 router.get('/', utils.ensureAdmin, function (req, res, next) {
@@ -24,8 +25,16 @@ router.get('/:userId', function (req, res, next) {
   }
 });
 
-router.get('/:userId/orderHistory', function(req,res,next){
-  //get all orders for user
+router.get('/:userId/orderHistory',utils.ensureAuthenticated,function(req,res,next){
+  Order.findAll({where: {userId: req.params.userId}})
+  .then(function(orders){
+    if(utils.ensureAdminOrSameUser(req,orders[0])){
+      res.send(orders);
+    } else{
+      res.sendStatus(401);
+    }   
+  })
+  .catch(next);
 });
 
 router.post('/', function (req, res, next) {
