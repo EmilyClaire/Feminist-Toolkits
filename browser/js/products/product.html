@@ -1,14 +1,14 @@
-<div class="product">
-  <p>
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
-    <img height="400px" ng-src="{{ product.photoUrl }}">
-    <p>Inventory: {{ product.inventory }}</p>
-    <p>Price: {{ product.currentPrice }} USD</p>
+<div class="well">
+    <legend><h3>{{ product.name }} <button style="float:right" ng-click="addItem()">Add Item To Cart</button></h3></legend>
+    <div class="well"><center><img style="max-height:300px" ng-src="{{ product.photoUrl }}"></center></div>
+    <p><i><center>{{ product.description }}</i></center></p>
+    <div class='well'>
+        <p><b>Inventory:</b> {{ product.inventory }}</p>
+        <p><b>Price:</b> {{ product.currentPrice }} USD</p>
+    </div>
     <p ui-sref-active="active"><a ui-sref="reviews({productId: product.id})">Check out reviews for {{ product.name }}</a>
-    <p ui-sref-active="active">Categories: <a ng-repeat="category in categories"
-    ui-sref="products({categoryId: category.id})">{{ category.name + ' ' }}</a></p>
-    <button ng-click="addItem()">Add Item To Cart</button>
-  </p>
+    <p ui-sref-active="active"><b>Categories:</b> <a ng-repeat="category in categories"
+    ui-sref="products({categoryId: category.id})">{{ category.name + ' ' }}</a><br>
+    
 
 </div>

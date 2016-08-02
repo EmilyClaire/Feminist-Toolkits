@@ -28,6 +28,7 @@ app.factory('ProductsFactory', function ($http) {
   };
 
   ProductsFactory.create = function (data) {
+      console.log('creating',data);
       return $http.post('/api/products', data)
       .then(getData)
       .then(function (newProduct) {

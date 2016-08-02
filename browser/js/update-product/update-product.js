@@ -28,6 +28,9 @@ app.controller('UpdateProductController', function ($state,$scope, productBundle
 	}
 	$scope.submitUpdate=function(url){
 		var productPromise;
+		if($scope.product.photoUrl=''){
+			$scope.product.photoUrl=null;
+		}
 		if($scope.goal==='update'){
 			productPromise=ProductsFactory.update($scope.product.id,$scope.product);
 		}
@@ -37,7 +40,7 @@ app.controller('UpdateProductController', function ($state,$scope, productBundle
 		productPromise.then(function(result){
 			if(result){
 				var product=result.product;
-				$state.go('products', {id:product.id});
+				$state.go('products', {id:result.id||product.id});
 			}
 			else{
 				$scope.somethingWrong=true;
