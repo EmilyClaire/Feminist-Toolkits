@@ -35,7 +35,7 @@ module.exports = db.define('product', {
     },
     photoUrl: {
         type: Sequelize.STRING,
-        defaultValue: '/Users/Mac/GraceHopper/Feminist-Toolkits/public/images/default.png'
+        defaultValue: '/images/default.png'
     }
 }, {
     defaultScope: {
