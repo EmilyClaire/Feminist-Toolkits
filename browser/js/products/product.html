@@ -9,6 +9,7 @@
     <p ui-sref-active="active">Categories: <a ng-repeat="category in categories"
     ui-sref="products({categoryId: category.id})">{{ category.name + ' ' }}</a></p>
     <button ng-click="addItem()">Add Item To Cart</button>
+    <add-review></add-review>
   </p>
 
 </div>
