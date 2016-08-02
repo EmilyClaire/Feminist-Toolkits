@@ -1,7 +1,7 @@
 app.config(function ($stateProvider) {
 
     $stateProvider.state('products', {
-        url: '/products/category/:categoryId',
+        url: '/products',
         controller: 'ProductsController',
         templateUrl: 'js/products/products.html',
         resolve: {
@@ -15,28 +15,19 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('ProductsController', function ($scope, products, categories,$stateParams) {
+app.controller('ProductsController', function ($scope, products, categories) {
 
     $scope.products = products;
     $scope.categories = categories;
-    console.log('state params',$stateParams);
-    if($stateParams.categoryId){
-        $scope.selectedCategory={};
-        $scope.selectedCategory.id=$stateParams.categoryId;
-    }
 
     $scope.categoryFilter = function (value) {
-        console.log('filtering');
         if ($scope.selectedCategory) {
-            console.log('here i am')
             return value.categories.some(function (cat) {
-                console.log('in callback')
                 return cat.id === $scope.selectedCategory.id;
             });
         } else {
             return true;
         }
     }
-
 
 });

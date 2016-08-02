@@ -40,7 +40,7 @@ app.controller('UpdateProductController', function ($state,$scope, productBundle
 		productPromise.then(function(result){
 			if(result){
 				var product=result.product;
-				$state.go('products', {id:result.id||product.id});
+				$state.go('product', {productId:result.id||product.id});
 			}
 			else{
 				$scope.somethingWrong=true;
