@@ -7,7 +7,7 @@
                 <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
             </li>
             <li class="search">
-                <input name="searchbox" type="text" class="form-control" placeholder="Search for a product" ng-model="desiredProduct" typeahead="product as product.name for product in allProducts | filter:$viewValue | limitTo:3">
+                <input name="searchbox" type="text" class="form-control" placeholder="Search for a product" ng-model="desiredProduct" typeahead="product as product.name for product in allProducts | filter:{name: $viewValue} | limitTo:3">
             </li>
         </ul>
         <button ng-show="!user" ui-sref="signup" class="btn login-button">Register</button>

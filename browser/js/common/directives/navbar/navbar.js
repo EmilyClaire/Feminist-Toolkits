@@ -47,6 +47,7 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, 
                 for(var i = 0; i < scope.allProducts.length; i++) {
                     if (scope.allProducts[i].id === Number(scope.desiredProduct.id)) {
                         $state.go('product', { productId: scope.desiredProduct.id });
+                        scope.desiredProduct = '';
                     }
                 }
             })
