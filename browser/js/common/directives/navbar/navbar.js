@@ -8,10 +8,10 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, 
             angular.extend(scope, ProductsFactory);
 
             scope.items = [
-               { label: 'Home', state: 'home' },
-               { label: 'About', state: 'about' },
-               { label: 'Products', state: 'products' },
-               { label: 'My Account', state: 'account', auth: true }
+                { label: 'Home', state: 'home' },
+                { label: 'About', state: 'about' },
+                { label: 'Products', state: 'products' },
+                { label: 'My Account', state: 'account', auth: true }
             ];
 
             scope.user = null;
