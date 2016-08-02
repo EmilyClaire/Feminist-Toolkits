@@ -4,8 +4,9 @@ app.directive('cart', function ($state, $cookieStore) {
         scope: {},
         templateUrl: 'js/common/directives/cart/cart.html',
         link: function (scope) {
-            // $cookieStore.remove('cart');
-            scope.checkingOut=false;
+            scope.checkingOut=function(){
+                return $state.is('checkout');
+            }
             var cookieStoreItems = $cookieStore.get('cart');
             scope.cart = {};
             if (cookieStoreItems) {
@@ -15,6 +16,7 @@ app.directive('cart', function ($state, $cookieStore) {
                 scope.cart.total=0;
                 scope.cart.numItems=0;
             }
+
 
             scope.expandCart=true;
             scope.scoldingMessages=["You're not gonna fight the patriarchy like that, now are you?","You may not need men, but you do need tools.","A woman without a man is like a fish without a bicycle, but fish definitely need tools to fight the patriarchy.","We know you hate capitalism, but every feminist needs her toolkit."];
@@ -40,11 +42,6 @@ app.directive('cart', function ($state, $cookieStore) {
             scope.$on('addingItemToCart',function(event,data){
                 scope.addToCart(data);
             });
-
-            scope.$on('backToShopping',function(){
-                scope.checkingOut=false;
-            });
-
             scope.removeFromCart=function(itemToRemove,quantity){
             	for (var i=0; i<scope.cart.items.length; i++){
             		if(scope.cart.items[i].id===itemToRemove.id){
@@ -64,14 +61,12 @@ app.directive('cart', function ($state, $cookieStore) {
             }
             scope.cartIsEmpty=function(){
             	return scope.cart.items.length===0;
-            }
+            }   
             scope.toggleExpand=function(){
                 scope.expandCart=!scope.expandCart;
             }
             scope.toggleCheckout=function(){
-                var serialized=JSON.stringify(scope.cart.items);
-                $state.go('checkout',{items: serialized,number:scope.cart.numItems,total:scope.cart.total});
-                scope.checkingOut=true;
+                $state.go('checkout');
             }
         }
     };
