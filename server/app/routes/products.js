@@ -74,10 +74,10 @@ router.put('/:id', ensureAdmin, function (req, res, next) {
     .catch(next);
 });
 
-router.get('/:productId/reviews', function (req, res, next) {
+router.get('/:id/reviews', function (req, res, next) {
     Review.findAll({
         where: {
-            productId: req.params.productId
+            productId: req.params.id
         }
     })
     .then(function (reviews) {
