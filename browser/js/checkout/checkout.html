@@ -2,15 +2,15 @@
   <form class="form-horizontal" name='checkoutForm' ng-submit='submitOrder()' >
     <fieldset>
       <legend><h2>Your Order</h2></legend>
-		<h4>Items ({{items.number}})</h4>
+		<h4>Items ({{cart.numItems}})</h4>
 		<table class='table'>
-			<tr ng-repeat='item in items'>
+			<tr ng-repeat='item in cart.items'>
         <td>{{item.quantity}}</td>
         <td><b>{{item.name}}</b></td>
         <td>${{item.currentPrice*item.quantity}}</td>
       </tr>
 		</table>
-	<h4>Total: ${{items.total}}</h4>  
+	<h4>Total: ${{cart.total}}</h4>  
       <legend><h2>Your Information</h2></legend>
       <div class="form-group">
         <label class="col-xs-2 control-label">Name</label>
