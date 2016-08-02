@@ -7,15 +7,35 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('admin-dashboard',function ($scope, AuthService, UserFactory, OrderFactory, $state, ProductsFactory, CategoryFactory) {
+app.controller('admin-dashboard',function ($scope, AuthService, UserFactory, OrderFactory, $state, ProductsFactory, CategoryFactory, AdminFactory) {
+
   $scope.isAdmin = AuthService.isAuthenticated && AuthService.isAdmin;
   if (!$scope.isAdmin){
     console.log("Git out!")
     $state.go('home')};
 
   $scope.showAll = function(elem){
-    console.log($scope[elem]);
     $scope[elem].numToShow = $scope[elem].length;
+  }
+
+  $scope.adminPromoClicked = false;
+
+  $scope.makeAdmin = function(user){
+    AdminFactory.makeAdmin(user)
+    .then(function (data) {
+      $scope.adminPromoClicked= false;
+      UserFactory.fetchAll()
+      .then(function (returnedUsers) {
+        $scope.users = returnedUsers;
+      })
+    })
+  }
+
+  $scope.togglePromoClick = function(user){
+    if ($scope.adminPromoClicked) {
+      $scope.adminPromoClicked=false
+    }
+    else {$scope.adminPromoClicked=user}
   }
 
   ProductsFactory.fetchAll()
@@ -28,11 +48,10 @@ app.controller('admin-dashboard',function ($scope, AuthService, UserFactory, Ord
     $scope.categories = returnedCats;
   })
 
-//order route not working at present
-  // OrderFactory.fetchAll()
-  // .then(function (returnedOrders) {
-  //   $scope.orders = returnedOrders;
-  // });
+  OrderFactory.fetchAll()
+  .then(function (returnedOrders) {
+    $scope.orders = returnedOrders;
+  });
 
   UserFactory.fetchAll()
   .then(function (returnedUsers) {

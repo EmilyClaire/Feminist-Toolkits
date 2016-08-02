@@ -1,17 +1,37 @@
 <div class="well">
   <legend><h2>View Orders</h2></legend>
-    <ul>
-      <!-- <li ng-repeat="order in orders | limitTo: 5">{{order.id}}</li> -->
-      <li>Pretend this is an order</li>
-    </ul>
-  <legend><h2>View Users</h2></legend>
-    <table>
-      <tr ng-repeat="user in users | limitTo: users.numToShow || 4">
-        <td >{{user.name}}</td> <td>&nbsp</td>
-        <td>{{user.email}}</td>
+    <table class='table'>
+      <tr>
+        <th>Order ID</th>
+        <th>Order Status</th>
+        <th>Shipping Address</th>
+      </tr>
+
+      <tr ng-repeat="order in orders | limitTo: orders.numToShow || 4">
+        <td>{{order.id}}</td>
+        <td>{{order.status}}</td>
+        <td>{{order.shippingAddress}}</td>
       </tr>
     </table>
-    <h6 ng-click="showAll('users')" ng-hide="users.numToShow<=users.length">Click to show all {{users.length}} users... </h6>
+  <legend><h2>View Users</h2></legend>
+    <table class='table'>
+      <tr><th>User Name</th> <th>User Email</th> <th>Is Admin?</th></tr>
+      <tr ng-repeat="user in users | limitTo: users.numToShow || 4">
+        <td >{{user.name}}</td>
+        <td>{{user.email}}</td>
+        <td><span ng-show="{{user.isAdmin}}"><strong>Admin</strong></span>
+          <button ng-hide="{{user.isAdmin}}" ng-click="togglePromoClick(user)">
+            <small>Promote</small>
+          </button>
+          <div ng-show="adminPromoClicked===user">
+            <h5 >Promote {{user.name}} to admin?</h5>
+            <button ng-click="makeAdmin(user)" class="btn btn-success">&nbsp;Yes</button>
+            <button ng-click="togglePromoClick()" class="btn btn-warn">&nbsp;Cancel</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <h6 ng-click="showAll('users')" ng-show="users.numToShow>users.length">Click to show all {{users.length}} users... </h6>
   <legend><h2>Manage Categories</h2></legend>
     <ul>
       <li ng-repeat="category in categories ">{{category.name}}</li>
