@@ -28,11 +28,19 @@ app.factory('ProductsFactory', function ($http) {
   };
 
   ProductsFactory.create = function (data) {
-      return $http.post('/products', data)
+      console.log('creating',data);
+      return $http.post('/api/products', data)
       .then(getData)
       .then(function (newProduct) {
-        var product = newProduct;
-        return product;
+        return newProduct;
+      });
+  };
+
+  ProductsFactory.update = function (id,data) {
+      return $http.put('/api/products/'+id, data)
+      .then(getData)
+      .then(function (newProduct) {
+        return newProduct;
       });
   };
 
