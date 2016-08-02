@@ -28,7 +28,7 @@ app.controller('UpdateProductController', function ($state,$scope, productBundle
 	}
 	$scope.submitUpdate=function(url){
 		var productPromise;
-		if($scope.product.photoUrl=''){
+		if($scope.product.photoUrl===''){
 			$scope.product.photoUrl=null;
 		}
 		if($scope.goal==='update'){

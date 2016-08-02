@@ -22,10 +22,10 @@
         </div>
         <label class="col-xs-2 control-label">Photo URL</label>
         <div class="col-xs-6">
-          <input name='productUrl' type="text" ng-value='product.photoUrl' class="form-control" ng-model='product.photoUrl'>
+          <input name='productUrl' type="text" ng-value='product.photoUrl' class="form-control" ng-model='product.photoUrl' required>
         </div>
         <div class="col-xs-4">
-          <button class="btn btn-warning" ng-click="updateCurrPhoto(product.photoUrl)">Update Preview</button>
+          <button class="btn btn-warning" ng-click="updateCurrPhoto(product.photoUrl)" type='button'>Update Preview</button>
         </div>
       </div>
       <div class="form-group">
@@ -34,6 +34,7 @@
           <div class="alert alert-warning" ng-show='updateForm.productDescription.$error.required&&updateForm.productDescription.$dirty'>Please enter a description.</div>
           <div class="alert alert-warning" ng-show='(updateForm.productInventory.$error.required||updateForm.productInventory.$error.pattern)&&updateForm.productInventory.$dirty'>Inventory: Please enter an integer.</div>
           <div class="alert alert-warning" ng-show='(updateForm.productPrice.$error.required||updateForm.productPrice.$error.pattern)&&updateForm.productPrice.$dirty'>Price: Please enter a valid price.</div> 
+          <div class="alert alert-warning" ng-show='updateForm.productUrl.$error.required&&updateForm.productUrl.$dirty'>Please enter a photo url.</div>
           <button type="submit" class="btn btn-success" ng-disabled='updateForm.$invalid'>Edit Product</button>
 
         </div>
