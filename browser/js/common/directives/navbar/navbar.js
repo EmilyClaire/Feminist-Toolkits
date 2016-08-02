@@ -1,10 +1,11 @@
-app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) {
+app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, ProductsFactory) {
 
     return {
         restrict: 'E',
         scope: {},
         templateUrl: 'js/common/directives/navbar/navbar.html',
         link: function (scope) {
+            angular.extend(scope, ProductsFactory);
 
             scope.items = [
                 { label: 'Home', state: 'home' },
@@ -37,6 +38,18 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
 
             setUser();
 
+            ProductsFactory.fetchAll
+            scope.products =
+
+            scope.searchProduct = function (letter) {
+                element.bind('keyup', function (event) {
+                    var value = element.val();
+                    if (value.length > 2) {
+                        // search
+                    }
+                })
+            }
+
             $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
             $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
             $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser);
@@ -46,3 +59,5 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
     };
 
 });
+
+

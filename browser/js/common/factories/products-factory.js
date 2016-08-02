@@ -8,17 +8,18 @@ app.factory('ProductsFactory', function ($http) {
     return response.data;
   }
 
-  ProductsFactory.fetchAll = function (categoryId) {
+  ProductsFactory.fetchAll = function () {
 
-    var queryParams = {};
+    // var queryParams = {};
 
-    if (categoryId) {
-      queryParams.categoryId = categoryId;
-    }
+    // if (categoryId) {
+    //   queryParams.categoryId = categoryId;
+    // }
 
-    return $http.get('/api/products', {
-      params: queryParams
-    })
+    // return $http.get('/api/products', {
+    //   params: queryParams
+    // })
+    return $http.get('/api/products')
     .then(getData);
   };
 
