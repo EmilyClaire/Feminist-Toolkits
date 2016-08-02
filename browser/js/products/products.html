@@ -6,7 +6,7 @@
             </select>
         </label>
     </p>
-    <div search-product="" ng-repeat="product in products | orderBy: 'name' | filter: categoryFilter">
+    <div ng-repeat="product in products | orderBy: 'name' | filter: categoryFilter">
       <img ng-src="{{ product.photoUrl }}" class="img-thumbnail" width="50" height="50">
       <a ui-sref="product({productId: product.id})">{{ product.name }}</a>
     </div>
