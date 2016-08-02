@@ -1,8 +1,7 @@
 
 <div class="product well">
-    <legend><h3>{{ product.name }} <button style="float:right" class ="btn btn-primary btn-sm" ng-click="addItem()">Add To Cart</button> <button style="float:right" class="btn btn-info btn-sm" ui-sref="reviews({productId: product.id})">Reviews</button><button style="float:right" class="btn btn-info btn-sm" ui-sref="updateProduct({id:product.id})">Edit Item</button>
-
-</h3></legend>
+    <button style="float:right" class ="btn btn-primary btn-sm" ng-click="addItem()">Add To Cart</button> <button style="float:right" class="btn btn-info btn-sm" ui-sref="reviews({productId: product.id})">Reviews</button><button style="float:right" class="btn btn-info btn-sm" ui-sref="updateProduct({id:product.id})">Edit Item</button>
+    <legend><h3>{{ product.name }}</h3></legend>
     <div class='well well-sm'>
         <center><img style="width:50%" ng-src="{{ product.photoUrl }}"></center>
     </div>
