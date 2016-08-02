@@ -17,9 +17,21 @@ app.controller('UpdateProductController', function ($scope, productBundle,$state
 		$scope.product=productBundle.product;
 		$scope.categories=productBundle.categories;
 		$scope.currPhotoUrl=$scope.product.photoUrl;
+		$scope.goal='update';
+	}
+	else{
+		$scope.goal='create';
 	}
 	$scope.updateCurrPhoto=function(url){
 		$scope.currPhotoUrl=url;
+	}
+	$scope.submitUpdate=function(url){
+		if($scope.goal==='update'){
+
+		}
+		else if($scope.goal==='create'){
+
+		}
 	}
 
 });
