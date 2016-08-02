@@ -12,7 +12,10 @@ app.factory('UserFactory', function ($http) {
     return $http.get('/api/users/'+id)
     .then(getData);
   };
-
+  UserFactory.fetchAll = function () {
+    return $http.get('/api/users/')
+    .then(getData);
+  };
   return UserFactory;
 
 });
