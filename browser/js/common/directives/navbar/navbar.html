@@ -10,11 +10,12 @@
                 <input name="searchbox" type="text" class="form-control" placeholder="Search for a product" ng-model="desiredProduct" typeahead="product as product.name for product in allProducts | filter:{name: $viewValue} | limitTo:3">
             </li>
         </ul>
+        <button ng-show="user && user.isAdmin" ui-sref="admin-dashboard" class="btn login-button">Admin Dashboard</button>
         <button ng-show="!user" ui-sref="signup" class="btn login-button">Register</button>
         <button ng-show="!user" ui-sref="login" class="btn login-button">Login</button>
         <div ng-show="user" class="welcome">
             <span>Welcome, {{ user.email }}!</span>
-            <a ng-click="logout()">Logout</a>
+            <a ng-click="logout()">Logout&nbsp;</a>
         </div>
     </div>
 </nav>
