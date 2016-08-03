@@ -20,7 +20,7 @@ app.controller('AdminDashboard',function ($scope, AuthService, UserFactory, Orde
 
   $scope.adminPromoClicked = false;
   $scope.deleteCatClicked = false;
-  $scope.statusUpdClicked = false;
+  // $scope.statusUpdClicked = false;
 
   $scope.makeAdmin = function(user){
     AdminFactory.makeAdmin(user)
@@ -36,7 +36,7 @@ app.controller('AdminDashboard',function ($scope, AuthService, UserFactory, Orde
     console.log("thescope", $scope);
     AdminFactory.updateOrderStatus(order, $scope.newStatus)
     .then(function () {
-      $scope.statusUpdClicked= false;
+      // $scope.statusUpdClicked= false;
       OrderFactory.fetchAll()
       .then(function (returnedOrders) {
         $scope.orders = returnedOrders;
@@ -67,11 +67,11 @@ app.controller('AdminDashboard',function ($scope, AuthService, UserFactory, Orde
     } else {$scope.deleteCatClicked=cat}
   }
 
-  $scope.toggleStatusUpdClick = function (order) {
-    if ($scope.statusUpdClicked) {
-      $scope.statusUpdClicked = false
-    } else {$scope.statusUpdClicked=order}
-  }
+  // $scope.toggleStatusUpdClick = function (order) {
+  //   if ($scope.statusUpdClicked) {
+  //     $scope.statusUpdClicked = false
+  //   } else {$scope.statusUpdClicked=order}
+  // }
 
   ProductsFactory.fetchAll()
   .then(function(returnedProds){
