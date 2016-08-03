@@ -8,17 +8,18 @@ app.factory('ProductsFactory', function ($http) {
     return response.data;
   }
 
-  ProductsFactory.fetchAll = function (categoryId) {
+  ProductsFactory.fetchAll = function () {
 
-    var queryParams = {};
+    // var queryParams = {};
 
-    if (categoryId) {
-      queryParams.categoryId = categoryId;
-    }
+    // if (categoryId) {
+    //   queryParams.categoryId = categoryId;
+    // }
 
-    return $http.get('/api/products', {
-      params: queryParams
-    })
+    // return $http.get('/api/products', {
+    //   params: queryParams
+    // })
+    return $http.get('/api/products')
     .then(getData);
   };
 
@@ -28,11 +29,19 @@ app.factory('ProductsFactory', function ($http) {
   };
 
   ProductsFactory.create = function (data) {
-      return $http.post('/products', data)
+      console.log('creating',data);
+      return $http.post('/api/products', data)
       .then(getData)
       .then(function (newProduct) {
-        var product = newProduct;
-        return product;
+        return newProduct;
+      });
+  };
+
+  ProductsFactory.update = function (id,data) {
+      return $http.put('/api/products/'+id, data)
+      .then(getData)
+      .then(function (newProduct) {
+        return newProduct;
       });
   };
 

@@ -1,16 +1,17 @@
-app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) {
+app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, ProductsFactory) {
 
     return {
         restrict: 'E',
         scope: {},
         templateUrl: 'js/common/directives/navbar/navbar.html',
-        link: function (scope) {
+        link: function (scope, element, atts) {
+            angular.extend(scope, ProductsFactory);
 
             scope.items = [
                 { label: 'Home', state: 'home' },
                 { label: 'About', state: 'about' },
                 { label: 'Products', state: 'products' },
-                { label: 'Members Only', state: 'membersOnly', auth: true }
+                { label: 'My Account', state: 'account', auth: true }
             ];
 
             scope.user = null;
@@ -37,6 +38,20 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
 
             setUser();
 
+            scope.fetchAll()
+            .then(function (products) {
+                scope.allProducts = products;
+            })
+
+            element.bind('keyup', function () {
+                for(var i = 0; i < scope.allProducts.length; i++) {
+                    if (scope.allProducts[i].id === Number(scope.desiredProduct.id)) {
+                        $state.go('product', { productId: scope.desiredProduct.id });
+                        scope.desiredProduct = '';
+                    }
+                }
+            })
+
             $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
             $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
             $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser);
@@ -46,3 +61,5 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
     };
 
 });
+
+

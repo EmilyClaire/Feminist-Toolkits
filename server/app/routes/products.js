@@ -67,7 +67,7 @@ router.put('/:id', ensureAdmin, function (req, res, next) {
     .then(function (updatedProduct) {
         var responseObj = {
           message: 'Updated successfully',
-          article: updatedProduct
+          product: updatedProduct
         };
         res.json(responseObj);
     })

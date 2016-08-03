@@ -22,7 +22,9 @@ app.factory('AdminFactory',function ($http) {
       console.log(err);
     })
   }
-  adminFac.updateOrderStatus = function(order,updStatus){
+
+  adminFac.updateOrderStatus = function(order, updStatus){
+
     return $http.put('/api/orders/'+order.id,{status: updStatus})
     .then(function (putResponse) {
       return (putResponse.data);

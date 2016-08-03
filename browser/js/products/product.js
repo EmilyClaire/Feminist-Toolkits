@@ -13,7 +13,12 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('ProductController', function ($scope, theProduct, $rootScope) {
+app.controller('ProductController', function ($scope, theProduct, $rootScope,AuthService) {
+  AuthService.getLoggedInUser()
+  .then(function(user){
+      if(!user){return}
+      if(user.isAdmin){$scope.isAdmin=true}
+  })
 
   $scope.product = theProduct.product;
   $scope.categories = theProduct.categories;
