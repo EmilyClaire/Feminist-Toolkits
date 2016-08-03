@@ -12,15 +12,12 @@
       <tr ng-repeat="order in orders | limitTo: orders.numToShow || 4">
         <td>{{order.id}}</td>
         <td>{{order.status}}</td>
-        <td class="glyphicon glyphicon-edit" ">
-        <!-- ng-click="toggleStatusUpdClick(order), ng-show="statusUpdClicked" -->
-          <span >
-
-          <form ng-submit="updOrderStatus(order)" >
-            <input type="text" name="statusField" ng-model="newStatus" placeholder="Coming soon!">
-            <small><button type="submit" >Submit</button></small>
-          </form>
-
+        <td class="glyphicon glyphicon-edit" ng-click="openStatusUpdate(order)">
+          <span ng-show="statusUpdClicked===order">
+            <form ng-submit="updOrderStatus(order)" name="statusForm">
+              <input type="text" name="statusField" ng-model="$parent.newStatus">
+              <small><button type="submit">Submit</button></small>
+            </form>
           </span>
         </td>
         <td>{{order.shippingAddress}}</td>
