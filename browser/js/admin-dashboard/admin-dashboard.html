@@ -43,7 +43,7 @@
         </td>
       </tr>
     </table>
-    <h6 ng-click="showAll('users')" ng-show="users.numToShow>users.length">Click to show all {{users.length}} users... </h6>
+    <h6 ng-click="showAll('users')" ng-show="users.length > users.numToShow || 4"> Click to show all {{users.length}} users... </h6>
 
   <h2>Manage Categories</h2>
     <table class='table'>
