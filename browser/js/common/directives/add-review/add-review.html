@@ -1,12 +1,12 @@
 <div class='add-review' ng-show='isLoggedIn()'>
   <form name="reviewForm">
 
-          <select ng-model="selectedStars"
+          <select ng-model="selectedStars" ng-init="selectedStars=3"
           ng-options="star for star in stars"
           ng-required="true">
           </select>
 
-        <p ng-show="reviewForm.$invalid && reviewForm.reviewText.$dirty">
+        <p ng-show="reviewForm.$invalid && reviewForm.reviewText.$touched">
             Your review is too short</p>
 
           <textarea ng-model="review"
@@ -15,7 +15,6 @@
           ng-minlength="20"
           ng-trim="true"
           ng-required="true">
-            ...
           </textarea>
             <button style="width:100%" ng-disabled="reviewForm.$invalid" ng-click="addReview(selectedStars, review)"
             class="btn btn-default btn-warning">

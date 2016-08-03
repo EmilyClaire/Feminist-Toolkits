@@ -1,7 +1,9 @@
-app.directive('addReview', function ($state, AuthService, $stateParams, $http, Session) {
+app.directive('addReview', function ($state, AuthService, $http, Session, ReviewsFactory) {
     return {
         restrict: 'E',
-        scope: {},
+        scope: {
+            productId: '='
+        },
         templateUrl: 'js/common/directives/add-review/add-review.html',
         link: function (scope) {
 
@@ -9,20 +11,14 @@ app.directive('addReview', function ($state, AuthService, $stateParams, $http, S
                 return AuthService.isAuthenticated();
             }
 
-            scope.addReview =function(){
-                $stateParams.productId;
-            };
-
             scope.stars = [ 5, 4, 3, 2, 1];
 
-            scope.selectedStars = 5;
-
             scope.addReview = function(stars, review){
-                $http.post("api/reviews/", {productId: $stateParams.productId,
-                    stars: stars, content: review, userId: Session.user.id})
-
-                $state.go('reviews', {productId: $stateParams.productId});
-            };
+                ReviewsFactory.addReview(stars, review, scope.productId)
+                .then(function(newReview){
+                    $state.go('reviews', {productId: newReview.productId});
+                });
+            }
         }
     }
 });
