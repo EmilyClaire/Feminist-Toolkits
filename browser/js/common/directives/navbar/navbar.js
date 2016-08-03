@@ -12,7 +12,7 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, 
                 { label: 'About', state: 'about' },
                 { label: 'Products', state: 'products' },
                 { label: 'My Account', state: 'account', auth: true },
-                { label: 'Admin Dashcoard', state: 'admin-dashboard', auth: true, admin: true}
+                { label: 'Admin Dashboard', state: 'admin-dashboard', auth: true, admin: true}
 
             ];
 
