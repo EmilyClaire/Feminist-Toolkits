@@ -1,12 +1,13 @@
 <section class="products">
     <p>
-        <label>Choose a category
+    <h1>{{selectedCategory.name}}</h1>
+        <label>Choose a category:
             <select name="category" ng-options="category.name for category in categories" ng-model="selectedCategory" required>
-              <option value="">All</option>
             </select>
         </label>
+
     </p>
-    <div ng-repeat="product in products | orderBy: 'name' | filter: categoryFilter">
+    <div class='well' ng-repeat="product in products | orderBy: 'name' | filter: categoryFilter">
       <img ng-src="{{ product.photoUrl }}" class="img-thumbnail" width="50" height="50">
       <a ui-sref="product({productId: product.id})">{{ product.name }}</a>
     </div>
