@@ -39,7 +39,7 @@ app.controller('AdminDashboard',function ($scope, AuthService, UserFactory, Orde
       OrderFactory.fetchAll()
       .then(function (returnedOrders) {
         $scope.orders = returnedOrders;
-        $scope.statusUpdClicked = null;
+        $scope.statusUpdClicked = false;
       })
     })
   }
@@ -53,6 +53,18 @@ app.controller('AdminDashboard',function ($scope, AuthService, UserFactory, Orde
       })
     })
   }
+
+  $scope.addCat = function(cat){
+    AdminFactory.addCat(cat)
+    .then(function () {
+      $scope.newCat= false;
+      CategoryFactory.fetchAll()
+      .then(function (returnedCats) {
+        $scope.categories = returnedCats;
+      })
+    })
+  }
+
   $scope.togglePromoClick = function(user){
     if ($scope.adminPromoClicked) {
       $scope.adminPromoClicked=false

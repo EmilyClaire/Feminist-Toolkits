@@ -12,10 +12,20 @@ app.factory('AdminFactory',function ($http) {
       console.log(err);
     })
   }
+
+  adminFac.addCat = function (catName) {
+    return $http.post('/api/categories/', {name: catName})
+    .then(function (newCat) {
+      return (newCat);
+    })
+    .catch(function (err) {
+      console.log(err);
+    })
+  }
+
   adminFac.deleteCat = function (cat) {
     return $http.delete('/api/categories/'+cat.id)
     .then(function (deleteResponse) {
-      console.log(deleteResponse);
       return (deleteResponse);
     })
     .catch(function (err) {
