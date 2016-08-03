@@ -29,9 +29,7 @@ app.controller('ProductsController', function ($scope, products, categories,$sta
     }
     $scope.categoryFilter = function (value) {
         if($scope.selectedCategory.name==='All'){
-            return value.categories.some(function (cat) {
-                return true;
-            });
+            return true;
         }
         if ($scope.selectedCategory) {
             return value.categories.some(function (cat) {
@@ -40,7 +38,6 @@ app.controller('ProductsController', function ($scope, products, categories,$sta
                     return true;
                 }
                 else{return false}
-                // return cat.id === $scope.selectedCategory.id;
             });
         } else {
             return true;
