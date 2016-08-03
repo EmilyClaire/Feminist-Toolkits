@@ -1,19 +1,33 @@
 <div class="well">
-  <legend><h2>View Orders</h2></legend>
+  <h2>View Orders</h2>
     <table class='table'>
       <tr>
         <th>Order ID</th>
         <th>Order Status</th>
+        <th>Update Status</th>
         <th>Shipping Address</th>
+        <th>Delete</th>
       </tr>
 
       <tr ng-repeat="order in orders | limitTo: orders.numToShow || 4">
         <td>{{order.id}}</td>
         <td>{{order.status}}</td>
+        <td class="glyphicon glyphicon-edit" ng-click="toggleStatusUpdClick(order)">
+          <span ng-show="statusUpdClicked">
+
+          <form ng-submit="updOrderStatus(order)" >
+            <input type="text" name="statusField" ng-model="newStatus">
+            <small><button type="submit" >Submit</button></small>
+          </form>
+
+          </span>
+        </td>
         <td>{{order.shippingAddress}}</td>
+        <td class="glyphicon glyphicon-remove"> </td>
       </tr>
     </table>
-  <legend><h2>View Users</h2></legend>
+
+  <h2>Manage Users</h2>
     <table class='table'>
       <tr><th>User Name</th> <th>User Email</th> <th>Is Admin?</th></tr>
       <tr ng-repeat="user in users | limitTo: users.numToShow || 4">
@@ -32,9 +46,24 @@
       </tr>
     </table>
     <h6 ng-click="showAll('users')" ng-show="users.numToShow>users.length">Click to show all {{users.length}} users... </h6>
-  <legend><h2>Manage Categories</h2></legend>
-    <ul>
-      <li ng-repeat="category in categories ">{{category.name}}</li>
-    </ul>
+
+  <h2>Manage Categories</h2>
+    <table class='table'>
+      <tr><th>ID</th><th>Category Name</th> <th>Delete</th></tr>
+      <tr ng-repeat="category in categories ">
+        <td>{{category.id}}</td>
+        <td>{{category.name}}</td>
+        <td><span class="glyphicon glyphicon-remove" ng-click="toggleCatClick(category)"></span>
+          <div ng-show="deleteCatClicked===category">
+            <h5 >Delete category {{category.name}}?</h5>
+            <button ng-click="deleteCat(category)" class="btn btn-success">&nbsp;Yes</button>
+            <button ng-click="toggleCatClick()" class="btn btn-warn">&nbsp;Cancel</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <!-- add category input -->
+  <legend><h2>Manage Products</h2></legend>
+    <button class="btn btn-info btn-sm" ui-sref="updateProduct">Create Product</button>
 
 </div>

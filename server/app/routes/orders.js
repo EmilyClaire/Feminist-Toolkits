@@ -48,9 +48,9 @@ router.post('/',function (req, res,next) {
     var quantitites=req.body.products.map(function(product){return product.quantity})
 
     userPromise=User.findOrCreate({
-        where: 
-            {email: req.body.email},  
-        defaults: 
+        where:
+            {email: req.body.email},
+        defaults:
             {name: req.body.name, password: generateRandomPassword()}
     })
     orderPromise=Order.create({shippingAddress:req.body.shippingAddress});
@@ -73,7 +73,7 @@ router.post('/',function (req, res,next) {
         return Order.findById(orderId);
     })
     .then(function(order){
-        res.status(201).send(order); 
+        res.status(201).send(order);
     })
     .catch(next);
 
@@ -88,7 +88,7 @@ router.delete('/:id',function(req,res,next){
     })
     .then(function(order){
         if(order){
-            res.sendStatus(204); 
+            res.sendStatus(204);
         }
         else{
             res.sendStatus(401);
@@ -100,10 +100,10 @@ router.delete('/:id',function(req,res,next){
 router.put('/:id',ensureAdmin,function(req,res,next){
     Order.findById(req.params.id)
     .then(function(order){
-        return Order.update({status:req.body.status})
-    }) 
+        return order.update({status:req.body.status})
+    })
     .then(function(){
-        res.sendStatus(204); 
+        res.sendStatus(204);
     })
     .catch(next);
 });

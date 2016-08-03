@@ -2,12 +2,12 @@ app.config(function ($stateProvider) {
   $stateProvider.state('admin-dashboard',{
     url: '/admin/dashboard',
     templateUrl: '/js/admin-dashboard/admin-dashboard.html',
-    controller: 'admin-dashboard'
+    controller: 'AdminDashboard'
   })
 
 });
 
-app.controller('admin-dashboard',function ($scope, AuthService, UserFactory, OrderFactory, $state, ProductsFactory, CategoryFactory, AdminFactory) {
+app.controller('AdminDashboard',function ($scope, AuthService, UserFactory, OrderFactory, $state, ProductsFactory, CategoryFactory, AdminFactory) {
 
   $scope.isAdmin = AuthService.isAuthenticated && AuthService.isAdmin;
   if (!$scope.isAdmin){
@@ -19,10 +19,12 @@ app.controller('admin-dashboard',function ($scope, AuthService, UserFactory, Ord
   }
 
   $scope.adminPromoClicked = false;
+  $scope.deleteCatClicked = false;
+  $scope.statusUpdClicked = false;
 
   $scope.makeAdmin = function(user){
     AdminFactory.makeAdmin(user)
-    .then(function (data) {
+    .then(function () {
       $scope.adminPromoClicked= false;
       UserFactory.fetchAll()
       .then(function (returnedUsers) {
@@ -30,12 +32,45 @@ app.controller('admin-dashboard',function ($scope, AuthService, UserFactory, Ord
       })
     })
   }
-
+  $scope.updOrderStatus = function(order){
+    console.log("thescope", $scope);
+    AdminFactory.updateOrderStatus(order, $scope.newStatus)
+    .then(function () {
+      $scope.statusUpdClicked= false;
+      OrderFactory.fetchAll()
+      .then(function (returnedOrders) {
+        $scope.orders = returnedOrders;
+        // $scope.newStatus=null;
+      })
+    })
+  }
+  $scope.deleteCat = function(cat){
+    AdminFactory.deleteCat(cat)
+    .then(function () {
+      $scope.deleteCatClicked= false;
+      CategoryFactory.fetchAll()
+      .then(function (returnedCats) {
+        console.log('delete cat returned')
+        $scope.categories = returnedCats;
+      })
+    })
+  }
   $scope.togglePromoClick = function(user){
     if ($scope.adminPromoClicked) {
       $scope.adminPromoClicked=false
-    }
-    else {$scope.adminPromoClicked=user}
+    } else {$scope.adminPromoClicked=user}
+  }
+
+  $scope.toggleCatClick = function (cat) {
+    if ($scope.deleteCatClicked) {
+      $scope.deleteCatClicked = false
+    } else {$scope.deleteCatClicked=cat}
+  }
+
+  $scope.toggleStatusUpdClick = function (order) {
+    if ($scope.statusUpdClicked) {
+      $scope.statusUpdClicked = false
+    } else {$scope.statusUpdClicked=order}
   }
 
   ProductsFactory.fetchAll()
