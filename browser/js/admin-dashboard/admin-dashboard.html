@@ -1,0 +1,73 @@
+<div class="well">
+  <h2>View Orders</h2>
+    <table class='table'>
+      <tr>
+        <th>Order ID</th>
+        <th>Order Status</th>
+        <th>Update Status</th>
+        <th>Shipping Address</th>
+        <th>Delete</th>
+      </tr>
+
+      <tr ng-repeat="order in orders | limitTo: orders.numToShow || 4">
+        <td>{{order.id}}</td>
+        <td>{{order.status}}</td>
+        <td class="glyphicon glyphicon-edit" ng-click="openStatusUpdate(order)">
+          <span ng-show="statusUpdClicked===order">
+            <form ng-submit="updOrderStatus(order)" name="statusForm">
+              <input type="text" name="statusField" ng-model="$parent.newStatus">
+              <small><button type="submit">Submit</button></small>
+            </form>
+          </span>
+        </td>
+        <td>{{order.shippingAddress}}</td>
+        <td class="glyphicon glyphicon-remove"> </td>
+      </tr>
+    </table>
+
+  <h2>Manage Users</h2>
+    <table class='table'>
+      <tr><th>User Name</th> <th>User Email</th> <th>Is Admin?</th></tr>
+      <tr ng-repeat="user in users | limitTo: users.numToShow || 4">
+        <td >{{user.name}}</td>
+        <td>{{user.email}}</td>
+        <td><span ng-show="{{user.isAdmin}}"><strong>Admin</strong></span>
+          <button ng-hide="{{user.isAdmin}}" ng-click="togglePromoClick(user)">
+            <small>Promote</small>
+          </button>
+          <div ng-show="adminPromoClicked===user">
+            <h5 >Promote {{user.name}} to admin?</h5>
+            <button ng-click="makeAdmin(user)" class="btn btn-success">&nbsp;Yes</button>
+            <button ng-click="togglePromoClick()" class="btn btn-warn">&nbsp;Cancel</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <h6 ng-click="showAll('users')" ng-show="users.numToShow>users.length">Click to show all {{users.length}} users... </h6>
+
+  <h2>Manage Categories</h2>
+    <table class='table'>
+      <tr><th>ID</th><th>Category Name</th> <th>Delete</th></tr>
+      <tr ng-repeat="category in categories ">
+        <td>{{category.id}}</td>
+        <td>{{category.name}}</td>
+        <td><span class="glyphicon glyphicon-remove" ng-click="toggleCatClick(category)"></span>
+          <div ng-show="deleteCatClicked===category">
+            <h5 >Delete category {{category.name}}?</h5>
+            <button ng-click="deleteCat(category)" class="btn btn-success">&nbsp;Yes</button>
+            <button ng-click="toggleCatClick()" class="btn btn-warn">&nbsp;Cancel</button>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- add category input -->
+    <form ng-submit="addCategory(newCat)" name="addCatForm">
+      <input type="text" name="catName" ng-model="newCat">
+      <button type="submit">Add</button>
+    </form>
+
+  <legend><h2>Manage Products</h2></legend>
+    <button class="btn btn-info btn-sm" ui-sref="updateProduct">Create Product</button>
+
+</div>
