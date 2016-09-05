@@ -35,10 +35,18 @@ router.put('/:id', auth.ensureAdmin, function(req, res, next){
   Category.update(req.body, {
     where: {
       id: req.params.id
-    }
+    },
+    returning: true
   })
-  .then(function(){
-    res.sendStatus(201)
+  .then(function(resultArr){
+
+    if(resultArr[0] !== 1){
+      var err = new Error();
+      err.message = "Nothing updated";
+      next(err);
+    }
+    var result = resultArr[1][0];
+    res.status(200).send(result);
   })
   .catch(next);
 });
